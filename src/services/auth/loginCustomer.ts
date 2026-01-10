@@ -2,12 +2,12 @@
 "use server"
 
 import { parse } from "cookie"
-import { cookies } from "next/headers"
 import { loginValidationZodSchema } from "@/validations/loginValidation"
 import jwt, { JwtPayload } from 'jsonwebtoken'
 import { redirect } from "next/navigation"
 import { getDefaultDashboardRoutes, isValidRediretForRole, UserRole } from "@/lib/auth-utils"
-import { getCookie, setCookie } from "@/lib/jwtHendeler"
+import { setCookie } from "./jwtHendeler"
+
 
 export const loginCustomer = async (_currentState: any, formData: FormData): Promise<any> => {
     try {

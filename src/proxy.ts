@@ -1,9 +1,10 @@
 import jwt, { JwtPayload } from 'jsonwebtoken';
-import { cookies } from 'next/headers';
+
 import { NextResponse } from 'next/server'
 import { NextRequest } from 'next/server'
 import { getDefaultDashboardRoutes, getRouteOwner, isAuthRoutes, UserRole } from './lib/auth-utils';
-import { deleteCookie } from './lib/jwtHendeler';
+import { deleteCookie } from './services/auth/jwtHendeler';
+
 
 
 // This function can be marked `async` if using `await` inside

@@ -3,11 +3,11 @@ import { cookies } from 'next/headers';
 import { NextResponse } from 'next/server'
 import { NextRequest } from 'next/server'
 import { getDefaultDashboardRoutes, getRouteOwner, isAuthRoutes, UserRole } from './lib/auth-utils';
+import { deleteCookie } from './lib/jwtHendeler';
 
 
 // This function can be marked `async` if using `await` inside
 export async function proxy(request: NextRequest) {
-    const cookieStore = await cookies()
     const pathName = request.nextUrl.pathname
     const accessToken = request.cookies.get("accessToken")?.value || null
 
@@ -17,8 +17,8 @@ export async function proxy(request: NextRequest) {
         const veryfiedToken: JwtPayload | string = jwt.verify(accessToken, process.env.JWT_SECRET as string)
 
         if (typeof veryfiedToken === "string") {
-            cookieStore.delete("accessToken")
-            cookieStore.delete("refreshToken")
+            await deleteCookie("accessToken")
+            await deleteCookie("refreshToken")
             return NextResponse.redirect(new URL("/login", request.url))
         }
 

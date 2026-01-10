@@ -7,6 +7,7 @@ import { loginValidationZodSchema } from "@/validations/loginValidation"
 import jwt, { JwtPayload } from 'jsonwebtoken'
 import { redirect } from "next/navigation"
 import { getDefaultDashboardRoutes, isValidRediretForRole, UserRole } from "@/lib/auth-utils"
+import { getCookie, setCookie } from "@/lib/jwtHendeler"
 
 export const loginCustomer = async (_currentState: any, formData: FormData): Promise<any> => {
     try {
@@ -73,10 +74,7 @@ export const loginCustomer = async (_currentState: any, formData: FormData): Pro
             throw new Error("Refresh token not found in cookies")
         }
 
-
-        const cookieStore = await cookies()
-
-        cookieStore.set("accessToken", accessToken, {
+        await setCookie("accessToken", accessToken, {
             httpOnly: true,
             secure: true,
             sameSite: "lax",
@@ -84,7 +82,7 @@ export const loginCustomer = async (_currentState: any, formData: FormData): Pro
             maxAge: 60 * 60,
         })
 
-        cookieStore.set("refreshToken", refreshTokenObject.refreshToken, {
+        await setCookie("refreshToken", refreshTokenObject.refreshToken, {
             httpOnly: true,
             secure: true,
             sameSite: "lax",

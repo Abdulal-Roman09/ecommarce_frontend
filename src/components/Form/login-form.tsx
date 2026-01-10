@@ -1,18 +1,17 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import { loginCustomer } from "@/services/auth/loginCustomer";
-import { useActionState } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
+import Link from "next/link";
+import Logo from "../shared/Logo";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import { Button } from "../ui/button";
-import Link from "next/link";
-import Logo from "../shared/Logo";
+import { useActionState } from "react";
+import { loginCustomer } from "@/services/auth/loginCustomer";
+import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 
-export default function LoginFrom() {
+export default function LoginFrom({ redirect }: { redirect?: string }) {
   const [state, formAction, isPending] = useActionState(loginCustomer, null);
-  console.log(state);
 
   const getFieldError = (fieldName: string) => {
     if (state && state.success === false && state.errors) {
@@ -35,6 +34,9 @@ export default function LoginFrom() {
 
         <CardContent>
           <form action={formAction} className="grid gap-4">
+            {redirect && (
+              <Input type="hidden" name="redirect" value={redirect} />
+            )}
             {/* Email */}
             <div className="grid gap-2">
               <Label htmlFor="email">Email</Label>

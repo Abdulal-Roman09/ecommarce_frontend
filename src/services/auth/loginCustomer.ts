@@ -1,19 +1,22 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use server"
 
-import { parse } from "cookie";
-import { cookies } from "next/headers";
-import { loginValidationZodSchema } from "@/validations/loginValidation";
-
+import { parse } from "cookie"
+import { cookies } from "next/headers"
+import { loginValidationZodSchema } from "@/validations/loginValidation"
+import jwt, { JwtPayload } from 'jsonwebtoken'
+import { redirect } from "next/navigation"
+import { getDefaultDashboardRoutes, isValidRediretForRole, UserRole } from "@/lib/auth-utils"
 
 export const loginCustomer = async (_currentState: any, formData: FormData): Promise<any> => {
     try {
-        let accessTokenObject: any = null;
-        let refreshTokenObject: any = null;
+
+        const redirectTo = formData.get("redirect")
+        console.log("redireact :", redirectTo)
 
         const loginData = {
             email: formData.get("email"),
-            password: formData.get("password")
+            password: formData.get("password"),
         }
 
         const validationFields = loginValidationZodSchema.safeParse(loginData)
@@ -23,67 +26,101 @@ export const loginCustomer = async (_currentState: any, formData: FormData): Pro
                 success: false,
                 errors: validationFields.error.issues.map(issue => ({
                     field: issue.path[0],
-                    message: issue.message
-                }))
+                    message: issue.message,
+                })),
             }
         }
 
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/login`, {
-            method: "POST",
-            body: JSON.stringify(loginData),
-            headers: {
-                "Content-Type": "application/json"
+        const res = await fetch(
+            `${process.env.NEXT_PUBLIC_API_URL}/auth/login`,
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(loginData),
             }
-        })
+        )
 
         const result = await res.json()
 
         if (!res.ok) {
-            return { success: false, message: result.message || "Login failed" };
+            return {
+                success: false,
+                message: result.message || "Login failed",
+            }
         }
+
+        const accessToken = result?.data?.accessToken
+        if (!accessToken) {
+            throw new Error("Access token not found in response body")
+        }
+
+        let refreshTokenObject: any = null
 
         const setCookieHeaders = res.headers.getSetCookie()
 
         if (setCookieHeaders && setCookieHeaders.length > 0) {
             setCookieHeaders.forEach((cookie: string) => {
                 const parsedCookie = parse(cookie)
-                if (parsedCookie['accessToken']) {
-                    accessTokenObject = parsedCookie
-                }
-                if (parsedCookie['refreshToken']) {
+                if (parsedCookie.refreshToken) {
                     refreshTokenObject = parsedCookie
                 }
             })
-        } else {
-            throw new Error("No Set-Cookie header found from server")
         }
 
-        if (!accessTokenObject || !refreshTokenObject) {
-            throw new Error("Tokens not found in server response")
+        if (!refreshTokenObject) {
+            throw new Error("Refresh token not found in cookies")
         }
+
 
         const cookieStore = await cookies()
 
-        cookieStore.set("accessToken", accessTokenObject.accessToken, {
-            secure: true,
+        cookieStore.set("accessToken", accessToken, {
             httpOnly: true,
-            maxAge: parseInt(accessTokenObject['Max-Age']) || 3600,
-            path: accessTokenObject.Path || "/",
-            sameSite: "lax"
+            secure: true,
+            sameSite: "lax",
+            path: "/",
+            maxAge: 60 * 60,
         })
 
         cookieStore.set("refreshToken", refreshTokenObject.refreshToken, {
-            secure: true,
             httpOnly: true,
-            maxAge: parseInt(refreshTokenObject['Max-Age']) || 7776000,
-            path: refreshTokenObject.Path || "/",
-            sameSite: "lax"
+            secure: true,
+            sameSite: "lax",
+            path: "/",
+            maxAge: 60 * 60 * 24 * 90,
         })
+
+        const verifyedToken: JwtPayload | string = jwt.verify(accessToken, process.env.JWT_SECRET as string)
+
+        if (typeof verifyedToken === 'string') {
+            throw new Error("Invalid Token")
+        }
+
+        const userRole: UserRole = verifyedToken.role
+        if (redirectTo) {
+            const requestedPath = redirectTo.toString()
+
+            if (isValidRediretForRole(requestedPath, userRole)) {
+                redirect(requestedPath)
+            } else {
+                redirect(getDefaultDashboardRoutes(userRole))
+            }
+        } else {
+            redirect(getDefaultDashboardRoutes(userRole))
+        }
+
 
         return result
 
     } catch (err: any) {
-        console.error("Login Error:", err);
-        return { success: false, error: err.message || "Something went wrong" };
+        if (err?.digest?.startsWith('NEXT_REDIRECT')) {
+            throw err
+        }
+        return {
+            success: false,
+            error: err.message || "Something went wrong",
+        }
     }
 }

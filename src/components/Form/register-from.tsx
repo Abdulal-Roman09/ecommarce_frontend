@@ -1,14 +1,14 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import { RegisterCustomer } from "@/services/auth/registerCustomer";
-import { useActionState } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
-import { Input } from "../ui/input";
-import { Label } from "../ui/label";
-import { Button } from "../ui/button";
 import Link from "next/link";
 import Logo from "../shared/Logo";
+import { Label } from "../ui/label";
+import { Input } from "../ui/input";
+import { Button } from "../ui/button";
+import { useActionState } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
+import { RegisterCustomer } from "@/services/auth/registerCustomer";
 
 export default function RegisterForm() {
   const [state, fromAction, isPanding] = useActionState(RegisterCustomer, null);

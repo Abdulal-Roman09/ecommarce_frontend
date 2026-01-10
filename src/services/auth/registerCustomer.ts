@@ -2,6 +2,7 @@
 "use server"
 
 import { registerValidationZodSchema } from "@/validations/registerValidation"
+import { loginCustomer } from "./loginCustomer"
 
 
 
@@ -48,12 +49,19 @@ export const RegisterCustomer = async (_currentState: any, formData: any): Promi
             cache: 'no-store'
         });
 
-        const data = await res.json();
+        const result = await res.json()
 
-        console.log(data, "data");
-        return data;
+        if (result.success) {
+            await loginCustomer(_currentState, formData)
+        }
+
+        return result
 
     } catch (err: any) {
+
+        if (err?.digest?.startsWith('NEXT_REDIRECT')) {
+            throw err
+        }
         console.log(err);
         return {
             success: false,

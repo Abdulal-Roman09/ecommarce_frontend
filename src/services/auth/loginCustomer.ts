@@ -99,6 +99,10 @@ export const loginCustomer = async (_currentState: any, formData: FormData): Pro
         }
 
         const userRole: UserRole = verifyedToken.role
+        if (!result.success) {
+            throw new Error(result.message || "Login failed");
+        }
+
         if (redirectTo) {
             const requestedPath = redirectTo.toString()
 
@@ -111,8 +115,6 @@ export const loginCustomer = async (_currentState: any, formData: FormData): Pro
             redirect(getDefaultDashboardRoutes(userRole))
         }
 
-
-        return result
 
     } catch (err: any) {
         if (err?.digest?.startsWith('NEXT_REDIRECT')) {

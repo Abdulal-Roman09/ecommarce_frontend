@@ -12,12 +12,12 @@ export default function LogOutButton() {
   };
 
   return (
-    <Button
+    <Button 
       onClick={handleLogout}
       variant="destructive"
-      className="flex items-center gap-2"
+      className="flex items-center gap-2 w-full"
     >
-      <LogOut className="w-4 h-4" />
+      <LogOut className="w-4 h-4 text-white" />
       <span>Logout</span>
     </Button>
   );

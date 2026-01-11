@@ -6,9 +6,10 @@ import Logo from "../shared/Logo";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import { Button } from "../ui/button";
-import { useActionState } from "react";
+import { useActionState, useEffect } from "react";
 import { loginCustomer } from "@/services/auth/loginCustomer";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
+import { toast } from "sonner";
 
 export default function LoginFrom({ redirect }: { redirect?: string }) {
   const [state, formAction, isPending] = useActionState(loginCustomer, null);
@@ -20,6 +21,11 @@ export default function LoginFrom({ redirect }: { redirect?: string }) {
     }
     return null;
   };
+  useEffect(() => {
+    if (state && !state.success && state.message) {
+      toast.error(state.message);
+    }
+  }, [state]);
 
   return (
     <div className="flex min-h-screen items-center justify-center p-4 ">

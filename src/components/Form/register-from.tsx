@@ -6,9 +6,10 @@ import Logo from "../shared/Logo";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
-import { useActionState } from "react";
+import { useActionState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { RegisterCustomer } from "@/services/auth/registerCustomer";
+import { toast } from "sonner";
 
 export default function RegisterForm() {
   const [state, fromAction, isPanding] = useActionState(RegisterCustomer, null);
@@ -19,6 +20,12 @@ export default function RegisterForm() {
     }
     return null;
   };
+
+  useEffect(() => {
+    if (state && !state.success && state.message) {
+      toast.error(state.message);
+    }
+  }, [state]);
 
   return (
     <div className="flex min-h-screen items-center justify-center p-4 ">

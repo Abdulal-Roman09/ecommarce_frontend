@@ -65,7 +65,13 @@ export const RegisterCustomer = async (_currentState: any, formData: any): Promi
         console.log(err);
         return {
             success: false,
-            message: err.message || "Registration failed"
+            message:
+                process.env.NODE_ENV === "development"
+                    ? err instanceof Error
+                        ? err.message
+                        : "Unknown error"
+                    : "Login failed",
         };
+
     }
 }

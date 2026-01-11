@@ -3,14 +3,12 @@
 import { LogOut } from "lucide-react";
 import { Button } from "../ui/button";
 import { logOutCustomer } from "@/services/auth/logout";
-import { useRouter } from "next/navigation";
+import { redirect } from "next/navigation";
 
 export default function LogOutButton() {
-  const router = useRouter();
-
   const handleLogout = async () => {
-    await logOutCustomer(); 
-    router.push("/login"); 
+    await logOutCustomer();
+    redirect("/login?loggedOut=true");
   };
 
   return (

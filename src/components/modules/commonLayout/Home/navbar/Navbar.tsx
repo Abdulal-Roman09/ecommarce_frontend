@@ -14,7 +14,15 @@ export default async function Navbar() {
     <header className="sticky top-0 z-50 w-full border-b bg-background">
       <div className="container mx-auto flex h-16 items-center justify-between px-4">
         {/* ===== Left : Logo ===== */}
-        <Logo brandName="Ecommarce" />
+        {/* Mobile logo */}
+        <div className="md:hidden">
+          <Logo brandName="" />
+        </div>
+
+        {/* Desktop logo */}
+        <div className="hidden md:flex">
+          <Logo brandName="Ecommarce" />
+        </div>
 
         {/* ======= Center:NavLinks */}
         <DasktopNavLink />

@@ -13,7 +13,6 @@ export const loginCustomer = async (_currentState: any, formData: FormData): Pro
     try {
 
         const redirectTo = formData.get("redirect")
-        console.log("redireact :", redirectTo)
 
         const loginData = {
             email: formData.get("email"),
@@ -98,19 +97,24 @@ export const loginCustomer = async (_currentState: any, formData: FormData): Pro
 
         const userRole: UserRole = verifyedToken.role
         if (!result.success) {
-            throw new Error(result.message || "Login failed");
+            const message =
+                process.env.NODE_ENV === "development"
+                    ? result.message
+                    : "Login failed";
+
+            throw new Error(message);
         }
 
-        if (redirectTo) {
-            const requestedPath = redirectTo.toString()
 
+        if (redirectTo) {
+            const requestedPath = redirectTo.toString();
             if (isValidRediretForRole(requestedPath, userRole)) {
-                redirect(requestedPath)
+                redirect(`${requestedPath}?loggedIn=true`);
             } else {
-                redirect(getDefaultDashboardRoutes(userRole))
+                redirect(`${getDefaultDashboardRoutes(userRole)}?loggedIn=true`);
             }
         } else {
-            redirect(getDefaultDashboardRoutes(userRole))
+            redirect(`${getDefaultDashboardRoutes(userRole)}?loggedIn=true`);
         }
 
 
@@ -120,7 +124,13 @@ export const loginCustomer = async (_currentState: any, formData: FormData): Pro
         }
         return {
             success: false,
-            error: err.message || "Something went wrong",
-        }
+            message:
+                process.env.NODE_ENV === "development"
+                    ? err instanceof Error
+                        ? err.message
+                        : "Unknown error"
+                    : "Login failed",
+        };
+
     }
 }

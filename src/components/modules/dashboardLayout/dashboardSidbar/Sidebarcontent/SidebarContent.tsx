@@ -1,13 +1,23 @@
 "use client";
 
-import { UserInfo } from "@/types/userInfo.interface";
-import { NavSection } from "@/types/dashboard.interfac";
-import Logo from "@/components/shared/Logo";
-import { ScrollArea } from "@/components/ui/scroll-area";
+import * as React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Separator } from "@/components/ui/separator";
+import { UserCheck } from "lucide-react";
+
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+
+import { Button } from "@/components/ui/button";
+import { ScrollArea } from "@/components/ui/scroll-area";
+
 import { getIconComponent } from "@/lib/icon-mapper";
+import { UserInfo } from "@/types/userInfo.interface";
+import { NavSection } from "@/types/dashboard.interfac";
 
 interface DashboardSidebarContentProps {
   userInfo: UserInfo;
@@ -18,19 +28,13 @@ interface DashboardSidebarContentProps {
 export function DashboardSidebarContent({
   userInfo,
   navItems,
-  dashboardHome,
 }: DashboardSidebarContentProps) {
   const pathname = usePathname();
 
   return (
-    <div className="fixed top-0 left-0 hidden h-screen w-64 flex-col border-r bg-background md:flex">
-      {/* Logo Section */}
-      <div className="flex h-16 items-center border-b px-6">
-        <Logo brandName="Ecommerce" />
-      </div>
-
-      {/* Navigation Section */}
-      <ScrollArea className="flex-1">
+    <aside className="fixed left-0 top-0 hidden h-screen w-64 flex-col border-r bg-background md:flex">
+      {/* Navigation */}
+      <ScrollArea className="mt-16 flex-1">
         <nav className="flex flex-col gap-6 p-4">
           {navItems.map((section, sectionIndex) => (
             <div key={sectionIndex} className="flex flex-col gap-2">
@@ -49,49 +53,66 @@ export function DashboardSidebarContent({
                     <Link
                       key={item.href}
                       href={item.href}
-                      className={`group flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-all duration-200
+                      className={`group flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors
                         ${
                           isActive
                             ? "bg-primary text-primary-foreground shadow-sm"
-                            : "text-muted-foreground hover:bg-secondary hover:text-secondary-foreground" // Hover state (Secondary color)
+                            : "text-muted-foreground hover:bg-primary/10 hover:text-primary"
                         }`}
                     >
-                      <Icon
-                        className={`h-4 w-4 transition-colors ${
-                          isActive
-                            ? "text-primary-foreground"
-                            : "group-hover:text-secondary-foreground"
-                        }`}
-                      />
+                      <Icon className="h-4 w-4" />
                       <span>{item.title}</span>
                     </Link>
                   );
                 })}
-                {sectionIndex < navItems.length - 1 && (
-                  <Separator className="my-4" />
-                )}
               </div>
             </div>
           ))}
         </nav>
       </ScrollArea>
 
-      {/* Footer / User Info (Optional) */}
-      <div className="border-t p-4">
-        <div className="flex items-center gap-3 px-2">
-          <div className="h-8 w-8 rounded-full bg-secondary flex items-center justify-center text-xs font-bold uppercase">
-            {userInfo?.name?.charAt(0) || "U"}
-          </div>
-          <div className="flex flex-col overflow-hidden">
-            <span className="truncate text-sm font-medium">
-              {userInfo?.name}
-            </span>
-            <span className="truncate text-xs text-muted-foreground">
-              {userInfo?.email}
-            </span>
-          </div>
-        </div>
+      {/* User Info Footer */}
+      <div className="mt-auto border-t p-4">
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button
+              variant="outline"
+              size="icon"
+              className="h-10 w-10 rounded-full"
+            >
+              <UserCheck className="h-5 w-5" />
+            </Button>
+          </DropdownMenuTrigger>
+
+          <DropdownMenuContent
+            align="start"
+            side="top"
+            sideOffset={12}
+            className="w-64 p-0"
+          >
+            {/* Basic Info */}
+            <div className="p-4 space-y-1">
+              <p className="text-sm font-semibold">{userInfo.name}</p>
+              <p className="text-xs text-muted-foreground">{userInfo.email}</p>
+            </div>
+
+            <DropdownMenuSeparator />
+
+            {/* Meta Info */}
+            <div className="space-y-2 p-3 text-xs">
+              <div className="flex items-center justify-between">
+                <span className="uppercase text-muted-foreground">Role</span>
+                <span className="font-medium uppercase">{userInfo.role}</span>
+              </div>
+
+              <div className="flex items-center justify-between">
+                <span className="uppercase text-muted-foreground">User ID</span>
+                <span className="font-mono text-[11px]">{userInfo.id}</span>
+              </div>
+            </div>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
-    </div>
+    </aside>
   );
 }

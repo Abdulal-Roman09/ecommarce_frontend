@@ -14,12 +14,22 @@ export const getCommonNavItems = (role: UserRole): NavSection[] => {
                 },
                 {
                     title: "My Profile",
-                    href: "/dashboard/profile",
+                    href: "/my-profile",
                     icon: "User",
                     roles: ["ADMIN", "SUPER_ADMIN", "VENDOR", "CUSTOMER"],
                 },
             ],
-        },
+        }, {
+            title: "Settings",
+            items: [
+                {
+                    title: "Change Password",
+                    href: "/change-password",
+                    icon: "Settings",
+                    roles: ["CUSTOMER"]
+                },
+            ],
+        }
     ];
 };
 
@@ -30,19 +40,19 @@ export const vendorNavItems = (role: UserRole): NavSection[] => {
             items: [
                 {
                     title: "Shop Info",
-                    href: "/dashboard/shop",
+                    href: "/vendor/dashboard/shop",
                     icon: "Store",
                     roles: ["VENDOR"],
                 },
                 {
                     title: "My Products",
-                    href: "/dashboard/products",
+                    href: "/vendor/dashboard/products",
                     icon: "Package",
                     roles: ["VENDOR"],
                 },
                 {
                     title: "Orders",
-                    href: "/dashboard/orders",
+                    href: "/vendor/dashboard/orders",
                     icon: "ShoppingCart",
                     roles: ["VENDOR"],
                 },
@@ -134,7 +144,7 @@ export const getNavItemsByRole = (role: UserRole): NavSection[] => {
 
     switch (role) {
         case "ADMIN":
-            
+
             return [...commonNavItems, ...adminNavItems(role)];
         case "SUPER_ADMIN":
             return [...commonNavItems, ...super_adminNavItems(role)];

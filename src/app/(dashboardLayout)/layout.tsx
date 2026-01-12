@@ -1,17 +1,18 @@
+import { ReactNode } from "react";
 import DashbardNavber from "@/components/modules/dashboardLayout/dashboardNavber/DashbardNavber";
 import DashboardSidbar from "@/components/modules/dashboardLayout/dashboardSidbar/DashboardSidbar";
-import { ReactNode } from "react";
+
+interface CommonDashboardPageProps {
+  children: ReactNode;
+}
 
 export default function CommonDashboardPage({
   children,
-}: {
-  children: ReactNode;
-}) {
+}: CommonDashboardPageProps) {
   return (
     <div>
       <DashbardNavber />
-      <DashboardSidbar />
-      {children}
+      <DashboardSidbar> {children}</DashboardSidbar>
     </div>
   );
 }

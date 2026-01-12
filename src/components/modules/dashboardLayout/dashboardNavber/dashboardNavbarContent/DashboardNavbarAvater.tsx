@@ -8,7 +8,6 @@ interface DashboardNavberAvaterProps {
 export function DashboardNavbarAvater({
   userInfo,
 }: DashboardNavberAvaterProps) {
-  console.log(userInfo);
   return (
     <div className="flex items-center gap-3">
       <Avatar className="h-9 w-9">

@@ -3,6 +3,7 @@ import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
 import LogOutSuccessToast from "@/components/shared/LogOutSuccessToast";
 import LoginSuccessToast from "@/components/shared/LoginSuccessToeast";
+import { ThemeProvider } from "@/provider/theme-provider";
 
 export const metadata: Metadata = {
   title: "Ecommarce",
@@ -15,9 +16,16 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body>
-        {children}
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          {children}
+        </ThemeProvider>
         <Toaster position="top-right" richColors />
         <LoginSuccessToast />
         <LogOutSuccessToast />

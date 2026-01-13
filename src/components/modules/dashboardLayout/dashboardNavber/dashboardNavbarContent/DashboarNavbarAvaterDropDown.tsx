@@ -36,14 +36,10 @@ export function DashboardNavberAvaterDropDown({
       <DropdownMenuContent align="end" className="w-60 rounded-xl p-1">
         {/* Header */}
         <DropdownMenuLabel className="flex flex-col gap-1 px-2 py-2">
-          <span className="text-sm font-medium">
-            {userInfo?.name ?? "User"}
-          </span>
-          <span className="text-xs text-muted-foreground truncate">
-            {userInfo?.email}
+          <span className="text-center font-medium">
+            {userInfo?.role ?? ""}
           </span>
         </DropdownMenuLabel>
-
         <DropdownMenuSeparator />
 
         {/* Profile */}
@@ -53,14 +49,16 @@ export function DashboardNavberAvaterDropDown({
             <span>Profile</span>
           </Link>
         </DropdownMenuItem>
-
+        <DropdownMenuSeparator />
         {/* Settings */}
+
         <DropdownMenuItem asChild>
           <Link href="/settings" className="flex items-center gap-2">
             <Settings className="h-4 w-4" />
             <span>Settings</span>
           </Link>
         </DropdownMenuItem>
+        <DropdownMenuSeparator />
 
         {/* Change Password */}
         <DropdownMenuItem asChild>

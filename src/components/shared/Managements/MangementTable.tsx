@@ -1,24 +1,3 @@
-import React from "react";
-import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import { Eye, Loader2, MoreHorizontal, Edit, Trash2 } from "lucide-react";
-
-/**
- * Column definition interface
- */
 export interface Column<T> {
   headers: string;
   accessor: keyof T | ((row: T) => React.ReactNode);
@@ -35,6 +14,25 @@ interface ManagementTableProps<T> {
   emptyMessage?: string;
   isRefreshing?: boolean;
 }
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+
+import React from "react";
+import { Button } from "@/components/ui/button";
+import { Eye, Loader2, MoreHorizontal, Edit, Trash2 } from "lucide-react";
 
 function ManagementTable<T>({
   data = [],
@@ -46,7 +44,6 @@ function ManagementTable<T>({
   emptyMessage = "No records found",
   isRefreshing = false,
 }: ManagementTableProps<T>) {
-
   const hasAction = onView || onEdit || onDelete;
 
   return (

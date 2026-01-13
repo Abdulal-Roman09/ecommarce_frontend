@@ -46,7 +46,7 @@ export default function SelectFilter({
       onValueChange={handleChange}
       disabled={isPending}
     >
-      <SelectTrigger className="w-[180px]">
+      <SelectTrigger className="w-44">
         <SelectValue placeholder={placeholder} />
       </SelectTrigger>
       <SelectContent>

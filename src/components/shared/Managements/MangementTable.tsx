@@ -1,6 +1,5 @@
 "use client";
 
-
 export interface Column<T> {
   headers: string;
   accessor: keyof T | ((row: T) => React.ReactNode);
@@ -72,7 +71,7 @@ function ManagementTable<T>({
             ))}
             {/* Action Header */}
             {hasAction && (
-              <TableHead className="w-[70px] text-right">Actions</TableHead>
+              <TableHead className="w-18 text-right">Actions</TableHead>
             )}
           </TableRow>
         </TableHeader>

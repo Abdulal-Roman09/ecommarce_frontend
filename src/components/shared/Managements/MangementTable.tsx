@@ -1,3 +1,6 @@
+"use client";
+
+
 export interface Column<T> {
   headers: string;
   accessor: keyof T | ((row: T) => React.ReactNode);

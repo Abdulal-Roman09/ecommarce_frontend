@@ -1,26 +1,52 @@
 "use client";
 
-import { Input } from "@/components/ui/input";
 import { Search } from "lucide-react";
-import { useSearchParams } from "next/navigation";
-import { useState } from "react";
+import { Input } from "@/components/ui/input";
+import { useDebounce } from "@/hooks/useDeboundce";
+import { useEffect, useState, useTransition } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 
 interface SearchFilterProps {
-  placehlder?: string;
+  placeholder?: string;
   paramName?: string;
 }
 
 export default function SearchFilter({
-  placehlder = "Search ....",
+  placeholder = "Search ....",
   paramName = "searchTerm",
 }: SearchFilterProps) {
-  const serachParams = useSearchParams();
-  const [value, setValue] = useState(serachParams.get(paramName) || "");
+  const router = useRouter();
+  const [isPending, startTransition] = useTransition();
+  const searchParams = useSearchParams();
+  const [value, setValue] = useState(searchParams.get(paramName) || "");
+  const debouncedValue = useDebounce(value, 500);
+
+  useEffect(() => {
+    const params = new URLSearchParams(searchParams.toString());
+    const initialValue = searchParams.get(paramName) || "";
+
+    if (debouncedValue === initialValue) {
+      return;
+    }
+
+    if (debouncedValue) {
+      params.set(paramName, debouncedValue);
+      params.set("page", "1");
+    } else {
+      params.delete(paramName);
+      params.delete("page");
+    }
+
+    startTransition(() => {
+      router.push(`?${params.toString()}`);
+    });
+  }, [debouncedValue, paramName, router, searchParams]);
+
   return (
-    <div>
-      <Search />
+    <div className="relative w-full max-w-sm">
+      <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
       <Input
-        placeholder={placehlder}
+        placeholder={placeholder}
         className="pl-10"
         value={value}
         onChange={(e) => setValue(e.target.value)}

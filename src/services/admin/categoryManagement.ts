@@ -1,7 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import z from "zod";
-import { serverFetchDelete, serverFetchGet, serverFetchPost } from "../auth/server-fetch";
+import { serverFetchDelete, serverFetchGet, serverFetchPost } from "../../lib/server-fetch";
+import { zodValidatior } from "@/lib/zodValidation";
 
 
 const createCategoryValdationSchema = z.object({
@@ -14,21 +15,15 @@ export async function createCategory(_prevState: any, formData: FormData) {
             title: formData.get("title") as string,
         };
 
-        const validated = createCategoryValdationSchema.safeParse(payload);
-
-        if (!validated.success) {
-            return {
-                success: false,
-                errors: validated.error.issues.map((issue) => ({
-                    field: issue.path[0],
-                    message: issue.message,
-                })),
-            };
+        if (zodValidatior(payload, createCategoryValdationSchema).success === false) {
+            return zodValidatior(payload, createCategoryValdationSchema)
         }
+
+        const validatedPayload = zodValidatior(payload, createCategoryValdationSchema)
 
         const newFormData = new FormData();
 
-        newFormData.append("data", JSON.stringify(validated.data));
+        newFormData.append("data", JSON.stringify(validatedPayload));
 
         const file = formData.get("file");
         if (file instanceof Blob) {

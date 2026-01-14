@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-"use server"
+"use server";
 
 import { parse } from "cookie"
 import { loginValidationZodSchema } from "@/validations/loginValidation"
@@ -7,7 +7,8 @@ import jwt, { JwtPayload } from 'jsonwebtoken'
 import { redirect } from "next/navigation"
 import { getDefaultDashboardRoutes, isValidRediretForRole, UserRole } from "@/lib/auth-utils"
 import { setCookie } from "./jwtHendeler"
-import { serverFetchPost } from "./server-fetch"
+import { serverFetchPost } from "../../lib/server-fetch"
+import { zodValidatior } from "@/lib/zodValidation"
 
 
 
@@ -16,27 +17,23 @@ export const loginCustomer = async (_currentState: any, formData: FormData): Pro
 
         const redirectTo = formData.get("redirect")
 
-        const loginData = {
+        const payload = {
             email: formData.get("email"),
             password: formData.get("password"),
         }
 
-        const validationFields = loginValidationZodSchema.safeParse(loginData)
+        const zodResult = zodValidatior(payload, loginValidationZodSchema)
 
-        if (!validationFields.success) {
-            return {
-                success: false,
-                errors: validationFields.error.issues.map(issue => ({
-                    field: issue.path[0],
-                    message: issue.message,
-                })),
-            }
+        if (!zodResult.success) {
+            return zodResult
         }
+        
+        const validatedPayload = zodResult.data
 
         const res = await serverFetchPost(`/auth/login`, {
-            body: JSON.stringify(loginData),
-            headers:{
-                "Content-Type":"application/json"
+            body: JSON.stringify(validatedPayload),
+            headers: {
+                "Content-Type": "application/json"
             }
         })
 

@@ -2,24 +2,18 @@
 "use client";
 
 import Link from "next/link";
+import { toast } from "sonner";
 import Logo from "../shared/Logo";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { useActionState, useEffect } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
+import InputFieldError from "../shared/InputFieldError";
 import { RegisterCustomer } from "@/services/auth/registerCustomer";
-import { toast } from "sonner";
+import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 
 export default function RegisterForm() {
   const [state, fromAction, isPanding] = useActionState(RegisterCustomer, null);
-  const getFieldError = (fieldName: string) => {
-    if (state && state.success === false && state.errors) {
-      const error = state.errors.find((err: any) => err.field === fieldName);
-      return error ? error.message : null;
-    }
-    return null;
-  };
 
   useEffect(() => {
     if (state && !state.success && state.message) {
@@ -53,11 +47,7 @@ export default function RegisterForm() {
                 type="text"
                 placeholder="John Doe"
               />
-              {getFieldError("name") && (
-                <p className="text-red-600 text-xs font-medium">
-                  {getFieldError("name")}
-                </p>
-              )}
+              <InputFieldError field="name" state={state} />
             </div>
 
             {/*  Email-Password  Side by Side */}
@@ -72,11 +62,7 @@ export default function RegisterForm() {
                   type="email"
                   placeholder="examm@email.com"
                 />
-                {getFieldError("email") && (
-                  <p className="text-red-600 text-xs font-medium">
-                    {getFieldError("email")}
-                  </p>
-                )}
+                <InputFieldError field="email" state={state} />
               </div>
               {/* Password Field */}
               <div className="grid gap-2">
@@ -88,11 +74,7 @@ export default function RegisterForm() {
                   type="password"
                   placeholder="********"
                 />
-                {getFieldError("password") && (
-                  <p className="text-red-600 text-xs font-medium">
-                    {getFieldError("password")}
-                  </p>
-                )}
+                <InputFieldError field="password" state={state} />
               </div>
             </div>
 
@@ -108,11 +90,7 @@ export default function RegisterForm() {
                   type="tel"
                   placeholder="+880 13XX XXXXXX"
                 />
-                {getFieldError("contactNumber") && (
-                  <p className="text-red-600 text-xs font-medium">
-                    {getFieldError("contactNumber")}
-                  </p>
-                )}
+                <InputFieldError field="contactNumber" state={state} />
               </div>
 
               {/* Address Field - FIXED: Error is now inside the grid div */}
@@ -124,11 +102,7 @@ export default function RegisterForm() {
                   name="presentAddress"
                   placeholder="Street, City, Country"
                 />
-                {getFieldError("presentAddress") && (
-                  <p className="text-red-600 text-xs font-medium">
-                    {getFieldError("presentAddress")}
-                  </p>
-                )}
+                <InputFieldError field="name" state={state} />
               </div>
             </div>
             <Button

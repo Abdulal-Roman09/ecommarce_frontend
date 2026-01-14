@@ -10,17 +10,19 @@ import { useActionState, useEffect } from "react";
 import { loginCustomer } from "@/services/auth/loginCustomer";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { toast } from "sonner";
+import InputFieldError from "../shared/InputFieldError";
 
+const initialState = {
+  success: true,
+  message: "",
+  errors: {},
+};
 export default function LoginFrom({ redirect }: { redirect?: string }) {
-  const [state, formAction, isPending] = useActionState(loginCustomer, null);
+  const [state, formAction, isPending] = useActionState(
+    loginCustomer,
+    initialState
+  );
 
-  const getFieldError = (fieldName: string) => {
-    if (state && state.success === false && state.errors) {
-      const error = state.errors.find((err: any) => err.field === fieldName);
-      return error ? error.message : null;
-    }
-    return null;
-  };
   useEffect(() => {
     if (state && !state.success && state.message) {
       toast.error(state.message);
@@ -55,11 +57,7 @@ export default function LoginFrom({ redirect }: { redirect?: string }) {
                 type="email"
                 placeholder="exam@email.com"
               />
-              {getFieldError("email") && (
-                <p className="text-red-600 text-xs font-medium">
-                  {getFieldError("email")}
-                </p>
-              )}
+              <InputFieldError field="email" state={state} />
             </div>
 
             {/* Password */}
@@ -74,11 +72,7 @@ export default function LoginFrom({ redirect }: { redirect?: string }) {
                 type="password"
                 placeholder="********"
               />
-              {getFieldError("password") && (
-                <p className="text-red-600 text-xs font-medium">
-                  {getFieldError("password")}
-                </p>
-              )}
+              <InputFieldError field="password" state={state} />
             </div>
 
             <Link

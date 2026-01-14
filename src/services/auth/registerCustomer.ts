@@ -3,8 +3,7 @@
 
 import { registerValidationZodSchema } from "@/validations/registerValidation"
 import { loginCustomer } from "./loginCustomer"
-import { serverFetch } from "./server-fetch"
-
+import { serverFetchPost } from "./server-fetch"
 
 
 export const RegisterCustomer = async (_currentState: any, formData: any): Promise<any> => {
@@ -44,7 +43,7 @@ export const RegisterCustomer = async (_currentState: any, formData: any): Promi
         const newFormData = new FormData();
         newFormData.append('data', JSON.stringify(registerData));
 
-        const res = await serverFetch.post(`${process.env.NEXT_PUBLIC_API_URL}/user/create-customer`, {
+        const res = await serverFetchPost(`/user/create-customer`, {
             body: newFormData,
         });
 

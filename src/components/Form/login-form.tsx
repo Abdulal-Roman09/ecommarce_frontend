@@ -31,7 +31,9 @@ export default function LoginFrom({ redirect }: { redirect?: string }) {
     <div className="flex min-h-screen items-center justify-center p-4 ">
       <Card className="w-full max-w-md shadow-md">
         <CardHeader className="space-y-1 text-center">
-          <Logo brandName="Ecommarce" />
+          <div className="flex items-center justify-center">
+            <Logo brandName="Ecommarce" />
+          </div>
           <CardTitle className="text-2xl font-bold">Welcome Back 👋</CardTitle>
           <p className="text-sm text-muted-foreground">
             Login to your account to continue

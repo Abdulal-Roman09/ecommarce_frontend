@@ -7,7 +7,8 @@ import jwt, { JwtPayload } from 'jsonwebtoken'
 import { redirect } from "next/navigation"
 import { getDefaultDashboardRoutes, isValidRediretForRole, UserRole } from "@/lib/auth-utils"
 import { setCookie } from "./jwtHendeler"
-import { serverFetch } from "./server-fetch"
+import { serverFetchPost } from "./server-fetch"
+
 
 
 export const loginCustomer = async (_currentState: any, formData: FormData): Promise<any> => {
@@ -32,11 +33,12 @@ export const loginCustomer = async (_currentState: any, formData: FormData): Pro
             }
         }
 
-        const res = await serverFetch.post(
-            `${process.env.NEXT_PUBLIC_API_URL}/auth/login`, {
+        const res = await serverFetchPost(`/auth/login`, {
             body: JSON.stringify(loginData),
-        }
-        )
+            headers:{
+                "Content-Type":"application/json"
+            }
+        })
 
         const result = await res.json()
 

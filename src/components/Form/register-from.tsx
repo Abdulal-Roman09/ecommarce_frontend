@@ -31,7 +31,9 @@ export default function RegisterForm() {
     <div className="flex min-h-screen items-center justify-center p-4 ">
       <Card className="w-full max-w-2xl shadow-2xl">
         <CardHeader className="space-y-1 text-center ">
-          <Logo brandName="Ecommarce" />
+          <div className="flex items-center justify-center">
+            <Logo brandName="Ecommarce" />
+          </div>
           <CardTitle className="text-3xl font-bold tracking-tight">
             Create an Account
           </CardTitle>

@@ -1,7 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import z from "zod";
-import { serverFetch } from "../auth/server-fetch";
+import { serverFetchDelete, serverFetchGet, serverFetchPost } from "../auth/server-fetch";
+
 
 const createCategoryValdationSchema = z.object({
     title: z.string().min(3, "Title must be at least 3 characters"),
@@ -34,7 +35,7 @@ export async function createCategory(_prevState: any, formData: FormData) {
             newFormData.append("file", file);
         }
 
-        const response = await serverFetch.post("/category/create-category", {
+        const response = await serverFetchPost("/category/create-category", {
             body: newFormData,
         });
 
@@ -59,7 +60,7 @@ export async function createCategory(_prevState: any, formData: FormData) {
 
 export async function getCategory() {
     try {
-        const response = await serverFetch.get("/category")
+        const response = await serverFetchGet("/category")
         return await response.json()
     } catch (err: any) {
         console.error(err);
@@ -75,7 +76,7 @@ export async function getCategory() {
 
 export async function deleteCategory(id: string) {
     try {
-        const response = await serverFetch.delete(`/category/${id}`);
+        const response = await serverFetchDelete(`/category/${id}`);
 
         if (!response.ok) {
             throw new Error("Failed to delete category");

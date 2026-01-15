@@ -89,8 +89,8 @@ export const adminNavItems = (role: UserRole): NavSection[] => {
             title: "Administration",
             items: [
                 {
-                    title: "Categories",
-                    href: "/admin/dashboard/categories",
+                    title: "Category Management",
+                    href: "/admin/dashboard/category-management",
                     icon: "Layers",
                     roles: ["ADMIN", "SUPER_ADMIN"],
                 },

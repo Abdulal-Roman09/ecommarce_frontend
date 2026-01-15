@@ -1,5 +1,4 @@
-import InputFieldError from "@/components/shared/InputFieldError";
-import { Button } from "@/components/ui/button";
+"use client";
 import {
   Dialog,
   DialogContent,
@@ -8,12 +7,15 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
-import { Input } from "@/components/ui/input";
-import { createCategory } from "@/services/admin/categoryManagement";
-import { Loader2, PlusCircle, UploadCloud } from "lucide-react"; // Icons for better UI
-import { useActionState, useEffect } from "react";
+
 import { toast } from "sonner";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { useActionState, useEffect } from "react";
+import { Loader2, PlusCircle, UploadCloud } from "lucide-react";
+import InputFieldError from "@/components/shared/InputFieldError";
+import { createCategory } from "@/services/admin/categoryManagement";
+import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
 
 interface ICategoryFromDialogProps {
   open: boolean;
@@ -49,7 +51,8 @@ export default function CategoryFromDialog({
             </DialogTitle>
           </div>
           <DialogDescription>
-            Add a new category to organize your products. Click save when {"you're"}
+            Add a new category to organize your products. Click save when{" "}
+            {"you're"}
             done.
           </DialogDescription>
         </DialogHeader>
@@ -62,7 +65,7 @@ export default function CategoryFromDialog({
               </FieldLabel>
               <Input
                 id="name"
-                name="name" 
+                name="name"
                 placeholder="e.g. SSD, Processor, RAM"
                 className="mt-1.5"
               />

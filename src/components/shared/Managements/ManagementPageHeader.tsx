@@ -20,19 +20,35 @@ export default function ManagementPageHeader({
   action,
   children,
 }: ManagementPageHeaderProps) {
-  const Icons = action?.icons || Plus;
+  const Icon = action?.icons || Plus;
+
   return (
-    <div>
-      <div>
-        <h1 className="">{title}</h1>
-        {description && <p>{description}</p>}
+    <div className="flex  items-center border justify-between gap-3 ">
+      {/* Left: Title & Description */}
+      <div className="space-y-0.5">
+        <h1 className="text-lg font-semibold tracking-tight sm:text-2xl">
+          {title}
+        </h1>
+
+        {description && (
+          <p className="text-xs text-muted-foreground sm:text-sm">
+            {description}
+          </p>
+        )}
       </div>
+
+      {/* Right: Action Button */}
       {action && (
-        <Button onClick={action.onCliked}>
-          <Icons className="" />
-          {action?.lable}
+        <Button
+          onClick={action.onCliked}
+          size="sm"
+          className="flex w-full items-center justify-center gap-2 sm:w-auto"
+        >
+          <Icon className="h-4 w-4" />
+          <span className="text-sm">{action.lable}</span>
         </Button>
       )}
+
       {children}
     </div>
   );

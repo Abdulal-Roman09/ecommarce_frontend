@@ -1,4 +1,5 @@
 "use client";
+
 import {
   Dialog,
   DialogContent,
@@ -7,15 +8,16 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-
-import { toast } from "sonner";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
+
+import { toast } from "sonner";
 import { useActionState, useEffect } from "react";
 import { Loader2, PlusCircle, UploadCloud } from "lucide-react";
+
 import InputFieldError from "@/components/shared/InputFieldError";
 import { createCategory } from "@/services/admin/categoryManagement";
-import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
 
 interface ICategoryFromDialogProps {
   open: boolean;
@@ -28,7 +30,7 @@ export default function CategoryFromDialog({
   onClose,
   onSuccess,
 }: ICategoryFromDialogProps) {
-  const [state, fromAction, pending] = useActionState(createCategory, null);
+  const [state, formAction, pending] = useActionState(createCategory, null);
 
   useEffect(() => {
     if (state?.success) {
@@ -42,72 +44,49 @@ export default function CategoryFromDialog({
 
   return (
     <Dialog open={open} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-106">
+      <DialogContent >
         <DialogHeader>
-          <div className="flex items-center gap-2">
-            <PlusCircle className="w-5 h-5 text-primary" />
-            <DialogTitle className="text-xl font-semibold">
-              Create New Category
-            </DialogTitle>
-          </div>
+            <DialogTitle className="text-xl">Create New Category</DialogTitle>
           <DialogDescription>
-            Add a new category to organize your products. Click save when{" "}
-            {"you're"}
-            done.
+            Add a new category to organize your products.
           </DialogDescription>
         </DialogHeader>
 
-        <form action={fromAction} className="space-y-6 pt-4">
-          <FieldGroup className="space-y-4">
+        <form action={formAction} className="space-y-2 pt-4">
+          <FieldGroup>
             <Field>
-              <FieldLabel htmlFor="name" className="text-sm font-medium">
-                Category Title
-              </FieldLabel>
-              <Input
-                id="name"
-                name="name"
-                placeholder="e.g. SSD, Processor, RAM"
-                className="mt-1.5"
-              />
+              <FieldLabel>Category Title</FieldLabel>
+              <Input name="name" placeholder="SSD, Processor, RAM" className="border border-primary/80" />
               <InputFieldError field="name" state={state} />
             </Field>
 
             <Field>
-              <FieldLabel
-                htmlFor="file"
-                className="text-sm font-medium flex items-center gap-1.5"
-              >
-                <UploadCloud className="w-4 h-4 text-muted-foreground" />
-                Upload Icon{" "}
-                <span className="text-xs text-muted-foreground font-normal">
-                  (Optional)
+              <FieldLabel className="flex items-center gap-2">
+                <UploadCloud className="h-4 w-4" />
+                Upload Icon
+                <span className="text-xs text-muted-foreground">
+                  (optional)
                 </span>
               </FieldLabel>
               <Input
-                id="file"
                 name="file"
                 type="file"
                 accept="image/*"
-                className="mt-1.5 cursor-pointer file:bg-primary/10 file:text-primary file:border-0 file:rounded-md file:px-2 file:py-0.5 hover:file:bg-primary/20 transition-all"
+                className="cursor-pointer border border-primary/80"
               />
             </Field>
           </FieldGroup>
 
-          <DialogFooter className="gap-2 sm:gap-0">
+          <DialogFooter className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
             <Button
               type="button"
               variant="outline"
               onClick={onClose}
               disabled={pending}
-              className="w-full sm:w-auto"
             >
               Cancel
             </Button>
-            <Button
-              type="submit"
-              disabled={pending}
-              className="w-full sm:w-auto min-w-26"
-            >
+            <Button type="submit" disabled={pending}>
               {pending ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />

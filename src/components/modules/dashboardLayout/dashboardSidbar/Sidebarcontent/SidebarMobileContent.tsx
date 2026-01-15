@@ -23,6 +23,7 @@ import { UserInfo } from "@/types/userInfo.interface";
 interface SidebarMobileContentProps {
   userInfo: UserInfo;
   navItems?: NavSection[];
+  dashboardHome: string;
 }
 
 export function SidebarMobileContent({

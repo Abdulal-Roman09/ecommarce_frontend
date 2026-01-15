@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { getCookie } from "@/services/auth/jwtHendeler";
 import LoginButton from "@/components/shared/LoginButton";
 import LogOutButton from "@/components/shared/LogOutButton";
-// import ThemeToggleButton from "@/components/shared/ThemeTogglerButton";
+import { ModeToggle } from "@/components/shared/ThemeTogglerButton";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 
 export default async function Navbar() {
@@ -30,7 +30,7 @@ export default async function Navbar() {
 
         {/* ===== Right : Desktop Actions ===== */}
         <div className="hidden md:flex items-center gap-4">
-          {/* <ThemeToggleButton /> */}
+          <ModeToggle />
           {accessToken ? <LogOutButton /> : <LoginButton />}
         </div>
 
@@ -47,7 +47,7 @@ export default async function Navbar() {
               {/* Top Row */}
               <div className="flex items-center justify-between">
                 <Logo brandName="Ecommarce" />
-                {/* <ThemeToggleButton /> */}
+                <ModeToggle />
               </div>
 
               {/* Auth */}

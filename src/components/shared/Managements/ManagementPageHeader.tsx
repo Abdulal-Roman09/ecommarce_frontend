@@ -23,7 +23,7 @@ export default function ManagementPageHeader({
   const Icon = action?.icons || Plus;
 
   return (
-    <div className="flex  items-center border justify-between gap-3 ">
+    <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
       {/* Left: Title & Description */}
       <div className="space-y-0.5">
         <h1 className="text-lg font-semibold tracking-tight sm:text-2xl">

@@ -19,7 +19,7 @@ export default function CategoryManagementsHeaders() {
   };
 
   return (
-    <div className="space-y-4 border border-amber-400">
+    <div className="space-y-4">
       <CategoryFromDialog
         open={isDialogOpen}
         onClose={() => setIsDialogOpen(false)}

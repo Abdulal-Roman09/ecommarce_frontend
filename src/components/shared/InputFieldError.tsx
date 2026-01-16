@@ -7,10 +7,7 @@ interface FieldErrorProps {
 
 export default function InputFieldError({ field, state }: FieldErrorProps) {
   const error = getInputFieldError(state, field);
-
-  console.log("FIELD:", field);
-  console.log("STATE ERRORS:", state?.errors);
-  console.log("FIELD ERROR:", error);
+  console.log(error)
 
   if (!error) return null;
 

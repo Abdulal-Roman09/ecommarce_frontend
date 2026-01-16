@@ -15,31 +15,41 @@ export async function createCategory(_prevState: any, formData: FormData) {
             title: formData.get("title") as string,
         };
 
-        if (zodValidatior(payload, createCategoryValdationSchema).success === false) {
-            return zodValidatior(payload, createCategoryValdationSchema)
+        const validationResult = zodValidatior(
+            payload,
+            createCategoryValdationSchema
+        );
+
+        if (!validationResult.success) {
+            return {
+                success: false,
+                errors: validationResult.errors ?? null,
+            };
         }
 
-        const validatedPayload = zodValidatior(payload, createCategoryValdationSchema)
-
         const newFormData = new FormData();
-
-        newFormData.append("data", JSON.stringify(validatedPayload));
+        newFormData.append(
+            "data",
+            JSON.stringify(validationResult.data)
+        );
 
         const file = formData.get("file");
-        if (file instanceof Blob) {
+        if (file instanceof File) {
             newFormData.append("file", file);
         }
 
-        const response = await serverFetchPost("/category/create-category", {
-            body: newFormData,
-        });
+        const response = await serverFetchPost(
+            "/category/create-category",
+            { body: newFormData }
+        );
 
         if (!response.ok) {
             throw new Error("Failed to create category");
         }
 
         const result = await response.json();
-        return result;
+
+        return JSON.parse(JSON.stringify(result));
 
     } catch (err: any) {
         console.error(err);
@@ -52,6 +62,7 @@ export async function createCategory(_prevState: any, formData: FormData) {
         };
     }
 }
+
 
 export async function getCategory() {
     try {

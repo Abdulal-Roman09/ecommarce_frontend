@@ -56,10 +56,9 @@ export default function DeleteConfirmationDialog({
           </AlertDialogDescription>
         </AlertDialogHeader>
 
-        <AlertDialogFooter className="gap-2 sm:gap-0 mt-4">
+        <AlertDialogFooter className="gap-6 sm:gap-0 mt-4">
           <AlertDialogCancel
             disabled={isDeleting}
-            className="border-slate-200 hover:bg-slate-100 transition-colors"
           >
             Cancel
           </AlertDialogCancel>

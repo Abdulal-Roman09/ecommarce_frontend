@@ -14,7 +14,7 @@ import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
 
 import { toast } from "sonner";
 import { useActionState, useEffect } from "react";
-import { Loader2, PlusCircle, UploadCloud } from "lucide-react";
+import { Loader2, UploadCloud } from "lucide-react";
 
 import InputFieldError from "@/components/shared/InputFieldError";
 import { createCategory } from "@/services/admin/categoryManagement";
@@ -56,8 +56,8 @@ export default function CategoryFromDialog({
           <FieldGroup>
             <Field>
               <FieldLabel>Category Title</FieldLabel>
-              <Input name="name" placeholder="SSD, Processor, RAM" className="border border-primary/80" />
-              <InputFieldError field="name" state={state} />
+              <Input name="title" placeholder="SSD, Processor, RAM" className="border border-primary/80" />
+              <InputFieldError field="title" state={state} />
             </Field>
 
             <Field>

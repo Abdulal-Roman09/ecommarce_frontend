@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -56,12 +56,8 @@ export default function DeleteConfirmationDialog({
           </AlertDialogDescription>
         </AlertDialogHeader>
 
-        <AlertDialogFooter className="gap-6 sm:gap-0 mt-4">
-          <AlertDialogCancel
-            disabled={isDeleting}
-          >
-            Cancel
-          </AlertDialogCancel>
+        <AlertDialogFooter className="flex justify-end gap-4 mt-4">
+          <AlertDialogCancel disabled={isDeleting}>Cancel</AlertDialogCancel>
 
           {/* Using custom className with AlertDialogAction to match destructive style */}
           <AlertDialogAction
@@ -72,7 +68,7 @@ export default function DeleteConfirmationDialog({
             disabled={isDeleting}
             className={cn(
               buttonVariants({ variant: "destructive" }),
-              "min-w-24"
+              "min-w-24",
             )}
           >
             {isDeleting ? (

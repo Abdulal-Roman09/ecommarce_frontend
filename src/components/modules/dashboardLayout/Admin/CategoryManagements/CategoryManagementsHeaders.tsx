@@ -26,7 +26,7 @@ export default function CategoryManagementsHeaders() {
         onSuccess={handleSuccess}
       />
 
-      <ManagementPageHeader 
+      <ManagementPageHeader
         title="Category Management"
         description="Manage category information and details"
         action={{

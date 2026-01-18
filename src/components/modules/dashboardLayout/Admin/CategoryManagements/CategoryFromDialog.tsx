@@ -13,7 +13,7 @@ import { Button } from "@/components/ui/button";
 import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
 
 import { toast } from "sonner";
-import { useActionState, useEffect } from "react";
+import { useActionState, useEffect, useRef } from "react";
 import { Loader2, UploadCloud } from "lucide-react";
 
 import InputFieldError from "@/components/shared/InputFieldError";
@@ -30,23 +30,29 @@ export default function CategoryFromDialog({
   onClose,
   onSuccess,
 }: ICategoryFromDialogProps) {
+  
   const [state, formAction, pending] = useActionState(createCategory, null);
+  const handledRef = useRef(false);
 
   useEffect(() => {
-    if (state?.success) {
+    if (state?.success && !handledRef.current) {
+      handledRef.current = true;
+
       toast.success(state.message);
       onSuccess();
       onClose();
-    } else if (state && !state.success) {
+    }
+
+    if (state && !state.success) {
       toast.error(state.message);
     }
   }, [state, onSuccess, onClose]);
 
   return (
     <Dialog open={open} onOpenChange={onClose}>
-      <DialogContent >
+      <DialogContent>
         <DialogHeader>
-            <DialogTitle className="text-xl">Create New Category</DialogTitle>
+          <DialogTitle className="text-xl">Create New Category</DialogTitle>
           <DialogDescription>
             Add a new category to organize your products.
           </DialogDescription>
@@ -56,7 +62,11 @@ export default function CategoryFromDialog({
           <FieldGroup>
             <Field>
               <FieldLabel>Category Title</FieldLabel>
-              <Input name="title" placeholder="SSD, Processor, RAM" className="border border-primary/80" />
+              <Input
+                name="title"
+                placeholder="SSD, Processor, RAM"
+                className="border border-primary/80"
+              />
               <InputFieldError field="title" state={state} />
             </Field>
 

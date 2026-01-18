@@ -1,13 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+"use server"
 
-import z from "zod";
-import { serverFetchDelete, serverFetchGet, serverFetchPost } from "../../lib/server-fetch";
 import { zodValidatior } from "@/lib/zodValidation";
+import { createCategoryValdationSchema } from "@/validations/categoryValidation";
+import { serverFetchDelete, serverFetchGet, serverFetchPost } from "../../lib/server-fetch";
 
-
-const createCategoryValdationSchema = z.object({
-    title: z.string().min(3, "Title must be at least 3 characters"),
-});
 
 export async function createCategory(_prevState: any, formData: FormData) {
     try {
@@ -15,27 +12,17 @@ export async function createCategory(_prevState: any, formData: FormData) {
             title: formData.get("title") as string,
         };
 
-        const validationResult = zodValidatior(
-            payload,
-            createCategoryValdationSchema
-        );
-
-        if (!validationResult.success) {
-            return {
-                success: false,
-                errors: validationResult.errors ?? null,
-            };
+        if (zodValidatior(payload, createCategoryValdationSchema).success === false) {
+            return zodValidatior(payload, createCategoryValdationSchema);
         }
 
-        const newFormData = new FormData();
-        newFormData.append(
-            "data",
-            JSON.stringify(validationResult.data)
-        );
+        const validatedPayload = zodValidatior(payload, createCategoryValdationSchema).data;
 
-        const file = formData.get("file");
-        if (file instanceof File) {
-            newFormData.append("file", file);
+        const newFormData = new FormData();
+        newFormData.append("data", JSON.stringify(validatedPayload));
+
+        if (formData.get("file")) {
+            newFormData.append("file", formData.get("file") as Blob)
         }
 
         const response = await serverFetchPost(
@@ -44,7 +31,8 @@ export async function createCategory(_prevState: any, formData: FormData) {
         );
 
         if (!response.ok) {
-            throw new Error("Failed to create category");
+            const errorData = await response.json();
+            throw new Error(`Failed to create category: ${errorData?.message || response.statusText}`);
         }
 
         const result = await response.json();
@@ -85,11 +73,13 @@ export async function deleteCategory(id: string) {
         const response = await serverFetchDelete(`/category/${id}`);
 
         if (!response.ok) {
-            throw new Error("Failed to delete category");
+            const errorData = await response.json();
+            throw new Error(`Failed to delete category: ${errorData?.message || response.statusText}`);
         }
 
         return await response.json();
     } catch (err: any) {
+        console.log(err)
         console.error(err);
         return {
             success: false,

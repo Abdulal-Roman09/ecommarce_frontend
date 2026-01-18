@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import DeleteConfirmationDialog from "@/components/shared/DeleteConfirmationDialog";
 import ManagementTable from "@/components/shared/Managements/MangementTable";
@@ -18,7 +18,7 @@ export default function CategoryTable({ category }: CategoryTableProps) {
   const [, startTransition] = useTransition();
 
   const [deletingCategory, setDeletingCategory] = useState<ICategory | null>(
-    null
+    null,
   );
   const [isDeleting, setIsDeleting] = useState(false);
 
@@ -38,10 +38,10 @@ export default function CategoryTable({ category }: CategoryTableProps) {
     setIsDeleting(true);
     const result = await deleteCategory(deletingCategory.id);
     setIsDeleting(false);
+    setDeletingCategory(null);
 
     if (result.success) {
       toast.success(result.message || "Category deleted successfully");
-      setDeletingCategory(null);
       handleRefresh();
     } else {
       toast.error(result.message || "Failed to delete category");

@@ -1,13 +1,14 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use server"
 
-import { getCookie } from "../services/auth/jwtHendeler"
+import { getCookie } from "@/services/auth/jwtHendeler";
+
 
 const BACKEND_API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api/v1"
 
 const serverFetchHelper = async (endpoint: string, options: RequestInit = {}): Promise<Response> => {
     const { headers, ...restOptions } = options
-    // const accessToken = await getCookie("accessToken")
+    const accessToken = await getCookie("accessToken");
 
     // Construct full URL
     const url = endpoint.startsWith('http') ? endpoint : `${BACKEND_API_URL}${endpoint}`
@@ -15,9 +16,10 @@ const serverFetchHelper = async (endpoint: string, options: RequestInit = {}): P
     const response = await fetch(url, {
         headers: {
             ...headers,
-            // ...(accessToken ? { "Cookie": `accessToken=${accessToken}` } : {}),
+            Cookie: accessToken ? `accessToken=${accessToken}` : "",
         },
         ...restOptions,
+        credentials: 'include',
     })
 
     return response

@@ -65,13 +65,18 @@ function ManagementTable<T>({
           <TableRow>
             {/* Dynamic Headers */}
             {columns.map((col, colIndex) => (
-              <TableHead key={colIndex} className={col.className}>
+              <TableHead
+                key={colIndex}
+                className={`${col.className} font-bold `}
+              >
                 {col.headers}
               </TableHead>
             ))}
             {/* Action Header */}
             {hasAction && (
-              <TableHead className="w-18 text-right">Actions</TableHead>
+              <TableHead className="w-18 text-right font-bold">
+                Actions
+              </TableHead>
             )}
           </TableRow>
         </TableHeader>

@@ -7,13 +7,11 @@ import { Suspense } from "react";
 export default async function CategoryManagementsPage() {
   const result = await getCategory();
 
-  const safeCategories = JSON.parse(JSON.stringify(result.data));
-
   return (
     <div className="space-y-6">
       <CategoryManagementsHeaders />
       <Suspense fallback={<TableSkeleton row={10} columns={5} />}>
-        <CategoryTable category={safeCategories} />
+        <CategoryTable category={result.data} />
       </Suspense>
     </div>
   );

@@ -85,10 +85,11 @@ export default function DashboardNavberContent({
             <Search className="h-5 w-5" />
           </Button>
           {/* saparator and Theme toggler */}
-          <div className="h-8 w-px bg-border mx-2 hidden sm:block" />
+          <div className="h-8 w-px bg-border mx-2 block sm:hidden" />
+
           <ModeToggle />
 
-          <div className="h-8 w-px bg-border mx-2 hidden sm:block" />
+          <div className="h-8 w-px bg-border mx-2 " />
 
           {/* User Profile Dropdown */}
           <div className="flex items-center transition-transform hover:scale-105">

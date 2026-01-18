@@ -6,7 +6,7 @@ import { loginValidationZodSchema } from "@/validations/loginValidation"
 import jwt, { JwtPayload } from 'jsonwebtoken'
 import { redirect } from "next/navigation"
 import { getDefaultDashboardRoutes, isValidRediretForRole, UserRole } from "@/lib/auth-utils"
-import { setCookie } from "./jwtHendeler"
+import { getCookie, setCookie } from "./jwtHendeler"
 import { serverFetchPost } from "../../lib/server-fetch"
 import { zodValidatior } from "@/lib/zodValidation"
 
@@ -27,7 +27,7 @@ export const loginCustomer = async (_currentState: any, formData: FormData): Pro
         if (!zodResult.success) {
             return zodResult
         }
-        
+
         const validatedPayload = zodResult.data
 
         const res = await serverFetchPost(`/auth/login`, {
@@ -83,6 +83,10 @@ export const loginCustomer = async (_currentState: any, formData: FormData): Pro
             path: "/",
             maxAge: 60 * 60 * 24 * 90,
         })
+
+        // Debug: Verify cookie was set
+        const verifyCookie = await getCookie("accessToken")
+        console.log("Cookie set verification:", verifyCookie ? "Cookie exists after setCookie" : "Cookie NOT found after setCookie")
 
         const verifyedToken: JwtPayload | string = jwt.verify(accessToken, process.env.JWT_SECRET as string)
 

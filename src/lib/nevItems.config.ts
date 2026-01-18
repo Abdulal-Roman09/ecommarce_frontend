@@ -1,6 +1,29 @@
 import { NavSection } from "@/types/dashboard.interfac";
 import { UserRole } from "./auth-utils";
 
+
+export const customerNavItems = (role: UserRole): NavSection[] => {
+    return [
+        {
+            title: "Shopping",
+            items: [
+                {
+                    title: "My Orders",
+                    href: "/dashboard/my-orders",
+                    icon: "ShoppingBag",
+                    roles: ["CUSTOMER"],
+                },
+                {
+                    title: "Wishlist",
+                    href: "/dashboard/wishlist",
+                    icon: "Heart",
+                    roles: ["CUSTOMER"],
+                },
+            ],
+        },
+    ];
+};
+
 export const getCommonNavItems = (role: UserRole): NavSection[] => {
     return [
         {
@@ -61,27 +84,6 @@ export const vendorNavItems = (role: UserRole): NavSection[] => {
     ];
 };
 
-export const customerNavItems = (role: UserRole): NavSection[] => {
-    return [
-        {
-            title: "Shopping",
-            items: [
-                {
-                    title: "My Orders",
-                    href: "/dashboard/my-orders",
-                    icon: "ShoppingBag",
-                    roles: ["CUSTOMER"],
-                },
-                {
-                    title: "Wishlist",
-                    href: "/dashboard/wishlist",
-                    icon: "Heart",
-                    roles: ["CUSTOMER"],
-                },
-            ],
-        },
-    ];
-};
 
 export const adminNavItems = (role: UserRole): NavSection[] => {
     return [
@@ -92,6 +94,18 @@ export const adminNavItems = (role: UserRole): NavSection[] => {
                     title: "Category Management",
                     href: "/admin/dashboard/category-management",
                     icon: "Layers",
+                    roles: ["ADMIN", "SUPER_ADMIN"],
+                },
+                {
+                    title: "Vendor Management",
+                    href: "/admin/dashboard/vendor-management",
+                    icon: "User2",
+                    roles: ["ADMIN", "SUPER_ADMIN"],
+                },
+                {
+                    title: "Customer Management",
+                    href: "/admin/dashboard/customer-management",
+                    icon: "User",
                     roles: ["ADMIN", "SUPER_ADMIN"],
                 },
                 {

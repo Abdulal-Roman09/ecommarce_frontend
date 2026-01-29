@@ -13,9 +13,8 @@ import { Button } from "@/components/ui/button";
 import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
 
 import { toast } from "sonner";
-import { useActionState, useEffect, useRef } from "react";
 import { Loader2, UploadCloud } from "lucide-react";
-
+import { useActionState, useEffect, useRef } from "react";
 import InputFieldError from "@/components/shared/InputFieldError";
 import { createCategory } from "@/services/admin/categoryManagement";
 
@@ -74,9 +73,6 @@ export default function CategoryFromDialog({
               <FieldLabel className="flex items-center gap-2">
                 <UploadCloud className="h-4 w-4" />
                 Upload Icon
-                <span className="text-xs text-muted-foreground">
-                  (optional)
-                </span>
               </FieldLabel>
               <Input
                 name="file"

@@ -1,20 +1,15 @@
 export interface IVendor {
-    id: string;
-
+    id?: string;
     email: string;
-    user?: IUser;
-
     name: string;
+    password: string,
     profilePhoto?: string | null;
     contactNumber: string;
-    gender: Gender;
+    gender: "MALE" | "FEMELE";
     address: string;
-
-    rating: number;
-
-    isVerified: boolean;
-    isDelete: boolean;
-
-    createdAt: Date;
-    updatedAt: Date;
+    rating?: number;
+    isVerified?: boolean;
+    isDelete?: boolean;
+    createdAt?: Date;
+    updatedAt?: Date;
 }

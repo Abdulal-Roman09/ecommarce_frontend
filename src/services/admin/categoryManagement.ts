@@ -51,7 +51,6 @@ export async function createCategory(_prevState: any, formData: FormData) {
     }
 }
 
-
 export async function getCategory() {
     try {
         const response = await serverFetchGet("/category")

@@ -2,12 +2,12 @@ import { getInputFieldError, IInputErrorState } from "@/lib/getInputFieldError";
 
 interface FieldErrorProps {
   field: string;
-  state: IInputErrorState;
+  state: IInputErrorState | null | undefined;
 }
 
 export default function InputFieldError({ field, state }: FieldErrorProps) {
   const error = getInputFieldError(state, field);
-  console.log(error)
+  console.log(error);
 
   if (!error) return null;
 

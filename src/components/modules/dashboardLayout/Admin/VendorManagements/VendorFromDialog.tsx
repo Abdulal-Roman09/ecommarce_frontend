@@ -16,6 +16,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
+import { toast } from "sonner";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { IVendor } from "@/types/vendor.interfac";
@@ -25,14 +26,13 @@ import { useEffect, useState, useActionState } from "react";
 import InputFieldError from "@/components/shared/InputFieldError";
 import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { createVendor, updateVendor } from "@/services/admin/VendorManagement";
-import { toast } from "sonner";
 
 interface VendorFromDialogProps {
   open: boolean;
   onClose: () => void;
   onSuccess: () => void;
   vendor?: IVendor | null;
-  categories?: ICategory[];
+  category?: ICategory[] | undefined;
 }
 
 export default function VendorFromDialog({
@@ -40,7 +40,7 @@ export default function VendorFromDialog({
   onClose,
   onSuccess,
   vendor,
-  categories = [],
+  category = [],
 }: VendorFromDialogProps) {
   const isEdit = !!vendor;
 
@@ -84,9 +84,9 @@ export default function VendorFromDialog({
             <Field>
               <FieldLabel>Full Name</FieldLabel>
               <Input
-                name="name"
                 id="name"
-                placeholder="Enter vendor name"
+                name="name"
+                placeholder="Dr. John Doe"
                 defaultValue={isEdit ? vendor?.name : undefined}
                 required
               />
@@ -131,10 +131,10 @@ export default function VendorFromDialog({
                   <SelectValue placeholder="Select a category" />
                 </SelectTrigger>
                 <SelectContent>
-                  {categories.length > 0 ? (
-                    categories.map((cat) => (
-                      <SelectItem key={cat.id} value={cat.id}>
-                        {cat.title}
+                  {category.length > 0 ? (
+                    category.map((cat) => (
+                      <SelectItem key={cat?.id} value={cat?.id}>
+                        {cat?.title}
                       </SelectItem>
                     ))
                   ) : (

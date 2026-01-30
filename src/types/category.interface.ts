@@ -1,5 +1,5 @@
-export interface ICategory {
-    id: string;
-    title: string;
-    icons: string
-} 
+export type ICategory = {
+  id: string;
+  title: string;
+  icons: string;
+} | undefined;

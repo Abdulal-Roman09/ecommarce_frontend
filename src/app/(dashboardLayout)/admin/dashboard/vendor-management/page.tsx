@@ -12,10 +12,10 @@ export default async function VendorManagementsPage() {
   const categoryResult = await getCategory();
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 ">
       <VendorManagementsHeaders category={categoryResult.data} />
-      <div className="flex">
-        <SearchFilter paramName="searchTerm" placeholder="Search Vendor...." />
+      <div className="flex gap-2">
+        <SearchFilter  paramName="searchTerm" placeholder="Search Vendor...." />
         <SelectFilter
           paramName="category"
           options={categoryResult.data.map((category: any) => ({

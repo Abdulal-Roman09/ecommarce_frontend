@@ -64,7 +64,7 @@ export default function VendorFromDialog({
 
   return (
     <Dialog open={open} onOpenChange={onClose}>
-      <DialogContent className="max-h-[90vh] overflow-y-auto">
+      <DialogContent className="max-h-[80vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="text-xl">
             {isEdit ? "Update Vendor" : "Create New Vendor"}

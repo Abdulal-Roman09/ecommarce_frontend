@@ -1,3 +1,5 @@
+"use client";
+
 import {
   Select,
   SelectContent,
@@ -45,7 +47,7 @@ export default function SelectFilter({
       onValueChange={hendelChange}
       disabled={isPending}
     >
-      <SelectTrigger>
+      <SelectTrigger className="border border-primary/30">
         <SelectValue placeholder={placeholder} />
       </SelectTrigger>
       <SelectContent>

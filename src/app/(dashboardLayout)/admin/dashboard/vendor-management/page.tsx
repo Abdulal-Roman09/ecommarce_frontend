@@ -1,10 +1,12 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Suspense } from "react";
-import TableSkeleton from "@/components/shared/Managements/TableSkeleton";
-import VendorTable from "@/components/modules/dashboardLayout/Admin/VendorManagements/VendorTable";
-import VendorManagementsHeaders from "@/components/modules/dashboardLayout/Admin/VendorManagements/VendorManagementHeaders";
+import SelectFilter from "@/components/shared/SelectFilter";
 import { getCategory } from "@/services/admin/categoryManagement";
 import SearchFilter from "@/components/shared/Managements/SearchFilter";
 import RefreshButton from "@/components/shared/Managements/RefreshButton";
+import TableSkeleton from "@/components/shared/Managements/TableSkeleton";
+import VendorTable from "@/components/modules/dashboardLayout/Admin/VendorManagements/VendorTable";
+import VendorManagementsHeaders from "@/components/modules/dashboardLayout/Admin/VendorManagements/VendorManagementHeaders";
 
 export default async function VendorManagementsPage() {
   const categoryResult = await getCategory();
@@ -14,9 +16,9 @@ export default async function VendorManagementsPage() {
       <VendorManagementsHeaders category={categoryResult.data} />
       <div className="flex">
         <SearchFilter paramName="searchTerm" placeholder="Search Vendor...." />
-        <SearchFilter
+        <SelectFilter
           paramName="category"
-          options={categoryResult.data.map((category) => ({
+          options={categoryResult.data.map((category: any) => ({
             label: category.title,
             value: category.id,
           }))}

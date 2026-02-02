@@ -25,7 +25,7 @@ import { ICategory } from "@/types/category.interface";
 import { useEffect, useState, useActionState } from "react";
 import InputFieldError from "@/components/shared/InputFieldError";
 import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
-import { createVendor, updateVendor } from "@/services/admin/VendorManagement";
+import { createVendor, updateVendor } from "@/services/admin/vendorManagement";
 
 interface VendorFromDialogProps {
   open: boolean;

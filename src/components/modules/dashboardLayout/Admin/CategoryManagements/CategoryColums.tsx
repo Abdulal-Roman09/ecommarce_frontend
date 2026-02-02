@@ -6,10 +6,10 @@ export const categoryColums: Column<ICategory>[] = [
   {
     headers: "Icon",
     accessor: (category) =>
-      category.icons ? (
+      category?.icons ? (
         <Image
-          src={category.icons}
-          alt={category.title}
+          src={category?.icons}
+          alt={category?.title}
           width={40}
           height={40}
           className="rounded-full object-cover"
@@ -20,6 +20,6 @@ export const categoryColums: Column<ICategory>[] = [
   },
   {
     headers: "Title",
-    accessor: (category) => category.title,
+    accessor: (category) => category?.title,
   },
 ];

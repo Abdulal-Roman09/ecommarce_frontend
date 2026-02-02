@@ -47,7 +47,7 @@ function ManagementTable<T>({
   isRefreshing = false,
 }: ManagementTableProps<T>) {
   const hasAction = onView || onEdit || onDelete;
-
+  console.log(data);
   return (
     <div className="rounded-lg border relative overflow-hidden">
       {/* Loading overlay for refresh state */}

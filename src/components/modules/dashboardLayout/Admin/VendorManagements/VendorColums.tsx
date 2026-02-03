@@ -45,11 +45,11 @@ export const vendorColums: Column<IVendor>[] = [
               key={category.id}
               className="px-2 py-1 bg-gray-100 rounded text-sm"
             >
-              {category.icons}
+              {category.title}
             </span>
           ))
         ) : (
-          <span className="text-xs text-gray-500">No specialties</span>
+          <span className="text-xs text-gray-500">No categories</span>
         )}
       </div>
     ),
@@ -70,7 +70,7 @@ export const vendorColums: Column<IVendor>[] = [
       <div className="flex items-center gap-1">
         <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
         <span className="text-sm font-medium">
-          {vendor?.rating!.toFixed(1)}
+          {vendor?.rating ? vendor.rating.toFixed(1) : "0"}
         </span>
       </div>
     ),
@@ -81,7 +81,7 @@ export const vendorColums: Column<IVendor>[] = [
   },
   {
     headers: "Verified",
-    accessor: (vendor) => <StatusBadgeCell isDeleted={vendor?.isVerified} />,
+    accessor: (vendor) => <StatusBadgeCell isDeleted={!vendor?.isVerified} />,
   },
   {
     headers: "Joined",

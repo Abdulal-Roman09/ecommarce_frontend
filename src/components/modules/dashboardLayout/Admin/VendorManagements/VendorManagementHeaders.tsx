@@ -6,12 +6,11 @@ import { useState, useTransition } from "react";
 import VendorFromDialog from "./VendorFromDialog";
 import { IVendor } from "@/types/vendor.interfac";
 import { ICategory } from "@/types/category.interface";
-import RefreshButton from "@/components/shared/Managements/RefreshButton";
 import ManagementPageHeader from "@/components/shared/Managements/ManagementPageHeader";
 
 interface VendorManagementsHeadersProps {
   vendor?: IVendor;
-  category?: ICategory
+  category?: ICategory[];
 }
 
 export default function VendorManagementsHeaders({
@@ -46,9 +45,7 @@ export default function VendorManagementsHeaders({
           icons: Plus,
           onCliked: () => setIsDialogOpen(true),
         }}
-      >
-        <RefreshButton />
-      </ManagementPageHeader>
+      />
     </div>
   );
 }

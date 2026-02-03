@@ -1,16 +1,16 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Suspense } from "react";
+import { ICategories } from "@/types/vendor.interfac";
 import SelectFilter from "@/components/shared/SelectFilter";
 import { getVendors } from "@/services/admin/vendorManagement";
+import { queryStringFormatter } from "@/lib/queryStringFormatter";
 import { getCategory } from "@/services/admin/categoryManagement";
 import SearchFilter from "@/components/shared/Managements/SearchFilter";
 import RefreshButton from "@/components/shared/Managements/RefreshButton";
 import TableSkeleton from "@/components/shared/Managements/TableSkeleton";
+import TablePagination from "@/components/shared/Managements/TablePagination";
 import VendorTable from "@/components/modules/dashboardLayout/Admin/VendorManagements/VendorTable";
 import VendorManagementsHeaders from "@/components/modules/dashboardLayout/Admin/VendorManagements/VendorManagementHeaders";
-import { queryStringFormatter } from "@/lib/queryStringFormatter";
-import { ICategories } from "@/types/vendor.interfac";
-import TablePagination from "@/components/shared/Managements/TablePagination";
 
 export default async function VendorManagementsPage({
   searchParams,
@@ -41,7 +41,10 @@ export default async function VendorManagementsPage({
         <RefreshButton />
       </div>
       <Suspense fallback={<TableSkeleton row={10} columns={10} />}>
-        <VendorTable Vendor={vendorResult.data || []} />
+        <VendorTable
+          vendors={vendorResult.data || []}
+          categories={categoryResult.data}
+        />
         <TablePagination
           currentPage={vendorResult?.meta?.page}
           totalPage={totalPages}

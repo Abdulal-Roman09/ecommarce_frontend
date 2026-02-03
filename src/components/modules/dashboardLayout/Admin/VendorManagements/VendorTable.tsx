@@ -1,27 +1,27 @@
 "use client";
 
-import {
-  deleteVendors,
-  softDelteVendors,
-} from "@/services/admin/vendorManagement";
-
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { vendorColums } from "./VendorColums";
 import { useState, useTransition } from "react";
-import { IVendor } from "@/types/vendor.interfac";
+import VendorFromDialog from "./VendorFromDialog";
+import { ICategories, IVendor } from "@/types/vendor.interfac";
 import VendorViewDetailDialog from "./VendorViewDetailDialog";
+import { softDelteVendors } from "@/services/admin/vendorManagement";
 import ManagementTable from "@/components/shared/Managements/MangementTable";
 import DeleteConfirmationDialog from "@/components/shared/DeleteConfirmationDialog";
 
 interface VendorTableProps {
-  Vendor: IVendor[];
+  vendors: IVendor[];
+  categories: ICategories[];
 }
 
-export default function VendorTable({ Vendor }: VendorTableProps) {
+export default function VendorTable({ vendors, categories }: VendorTableProps) {
   const router = useRouter();
   const [, startTransition] = useTransition();
+
   const [viewingVendor, setViewingVendor] = useState<IVendor | null>(null);
+  const [editingVendor, setEditingVendor] = useState<IVendor | null>(null);
   const [deletingVendor, setDeletingVendor] = useState<IVendor | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
 
@@ -31,12 +31,16 @@ export default function VendorTable({ Vendor }: VendorTableProps) {
     });
   };
 
-  const hendelView = (vendor: IVendor) => {
+  const handleView = (vendor: IVendor) => {
     setViewingVendor(vendor);
   };
 
-  const handleDelete = (Vendor: IVendor) => {
-    setDeletingVendor(Vendor);
+  const handleEdit = (vendor: IVendor) => {
+    setEditingVendor(vendor);
+  };
+
+  const handleDelete = (vendor: IVendor) => {
+    setDeletingVendor(vendor);
   };
 
   const confirmDelete = async () => {
@@ -51,28 +55,43 @@ export default function VendorTable({ Vendor }: VendorTableProps) {
       toast.success(result.message || "Vendor deleted successfully");
       handleRefresh();
     } else {
-      toast.error(result.message || "Failed to delete Vendor");
+      toast.error(result.message || "Failed to delete vendor");
     }
   };
 
   return (
     <>
       <ManagementTable
-        data={Vendor}
+        data={vendors}
         columns={vendorColums}
-        onEdit={() => {}}
-        onView={hendelView}
-        getRowKey={(Vendor) => Vendor.id}
+        onEdit={handleEdit}
+        onView={handleView}
         onDelete={handleDelete}
-        emptyMessage="No Vendor found"
+        getRowKey={(vendor) => vendor.id}
+        emptyMessage="No vendor found"
       />
 
-      {/* views Vendor Detiles */}
+      {/* Edit Vendor Form */}
+
+      <VendorFromDialog
+        open={!!editingVendor}
+        onClose={() => setEditingVendor(null)}
+        category={categories}
+        vendor={editingVendor}
+        onSuccess={() => {
+          setEditingVendor(null);
+          handleRefresh();
+        }}
+      />
+
+      {/* View Vendor Details */}
+
       <VendorViewDetailDialog
         open={!!viewingVendor}
         onClose={() => setViewingVendor(null)}
         vendor={viewingVendor}
       />
+      
 
       <DeleteConfirmationDialog
         open={!!deletingVendor}

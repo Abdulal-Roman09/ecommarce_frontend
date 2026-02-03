@@ -3,7 +3,7 @@
 
 import { IVendor } from "@/types/vendor.interfac"
 import { zodValidatior } from "@/lib/zodValidation"
-import { serverFetchPost, serverFetchGet, serverFetchDelete } from "@/lib/server-fetch"
+import { serverFetchPost, serverFetchGet, serverFetchDelete, serverFetchPatch } from "@/lib/server-fetch"
 import { vendorValidationSchema } from "@/validations/vendorValidation"
 
 
@@ -53,8 +53,6 @@ export const createVendor = async (_prevState: any, formData: FormData) => {
             body: newFormData,
         })
         const result = await response.json()
-        // console.log(result)
-        // console.log({ result })
         return result
     } catch (error: any) {
         console.error("Vendor creation error:", error)
@@ -111,27 +109,17 @@ export const updateVendor = async (id: string, _prevState: any, formData: FormDa
             password: formData.get("password") as string,
         }
 
-        const validation = zodValidatior(payload, vendorValidationSchema.updateVendor)
-        if (validation.success === false) {
-            console.log("Validation errors:", validation)
-            return validation
-        }
-
-        const validatedPayload = validation.data
+        const validatedPayload = zodValidatior(payload, vendorValidationSchema.updateVendor).data
 
         if (!validatedPayload) {
             throw new Error("Invalid Payload")
         }
 
-        const newFormData = new FormData()
-        newFormData.append("data", JSON.stringify(validatedPayload))
-
-        if (formData.get("file")) {
-            newFormData.append("file", formData.get("file") as Blob)
-        }
-
-        const response = await serverFetchPost(`/vendor/${id}`, {
-            body: newFormData
+        const response = await serverFetchPatch(`/vendor/${id}`, {
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(validatedPayload)
         })
         const result = await response.json()
         console.log({ result })

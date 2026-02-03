@@ -6,10 +6,7 @@ import {
 } from "@/components/ui/dialog";
 
 import {
-  Briefcase,
   Calendar,
-  DollarSign,
-  GraduationCap,
   Mail,
   MapPin,
   Phone,
@@ -43,211 +40,131 @@ export default function VendorViewDetailDialog({
   return (
     <Dialog open={open} onOpenChange={onClose}>
       <DialogContent className="min-w-5xl max-h-[90vh] flex flex-col p-0">
-        <DialogHeader className="px-6 pt-6 pb-4">
-          <DialogTitle>vendor Profile</DialogTitle>
+        <DialogHeader className="px-6 pt-6 pb-4 border-b">
+          <DialogTitle className="text-xl font-semibold">
+            Vendor Profile
+          </DialogTitle>
         </DialogHeader>
 
-        <div className="flex-1 overflow-y-auto px-6 pb-6">
-          {/* vendor Profile Header */}
-          <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6 p-6 bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-950 dark:to-indigo-950 rounded-lg mb-6">
-            <Avatar className="h-24 w-24 border-4 border-white shadow-lg">
-              <AvatarImage src={vendor?.profilePhoto} alt={vendor?.name} />
-              <AvatarFallback className="text-2xl">
-                {getInitials(vendor?.name || "")}
+        <div className="flex-1 overflow-y-auto px-6 pb-6 space-y-6">
+          {/* Header */}
+          <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6 p-6 rounded-xl bg-muted/40">
+            <Avatar className="h-24 w-24 border shadow-sm">
+              <AvatarImage src={vendor.profilePhoto ?? undefined} />
+              <AvatarFallback className="text-2xl font-semibold">
+                {getInitials(vendor.name)}
               </AvatarFallback>
             </Avatar>
-            <div className="flex-1 text-center sm:text-left">
-              <h2 className="text-3xl font-bold mb-1">{vendor?.name}</h2>
-              <p className="text-muted-foreground mb-2 flex items-center justify-center sm:justify-start gap-2">
+
+            <div className="flex-1 text-center sm:text-left space-y-2">
+              <h2 className="text-3xl font-bold">{vendor.name}</h2>
+
+              <p className="text-sm text-muted-foreground flex items-center justify-center sm:justify-start gap-2">
                 <Mail className="h-4 w-4" />
-                {vendor?.email}
+                {vendor.email}
               </p>
+
               <div className="flex flex-wrap gap-2 justify-center sm:justify-start">
-                <Badge
-                  variant={vendor?.isDelete ? "destructive" : "default"}
-                  className="text-sm"
-                >
-                  {vendor?.isDelete ? "Inactive" : "Active"}
+                <Badge variant={vendor.isDelete ? "destructive" : "default"}>
+                  {vendor.isDelete ? "Inactive" : "Active"}
                 </Badge>
-                {vendor?.rating !== undefined && (
-                  <Badge variant="secondary" className="text-sm">
-                    <Star className="h-3 w-3 mr-1 fill-yellow-400 text-yellow-400" />
-                    {vendor.rating.toFixed(1)} Rating
+
+                {vendor.rating !== undefined && (
+                  <Badge variant="secondary">
+                    <Star className="h-3 w-3 mr-1" />
+                    {vendor.rating.toFixed(1)}
                   </Badge>
                 )}
               </div>
             </div>
           </div>
 
-          {/* Information Grid */}
-          <div className="space-y-6">
-            {/* Professional Information */}
-            <div>
-              <div className="flex items-center gap-2 mb-4">
-                <Stethoscope className="h-5 w-5 text-blue-600" />
-                <h3 className="font-semibold text-lg">
-                  Professional Information
-                </h3>
+          {/* Category */}
+          {vendor.categories?.length > 0 && (
+            <section className="space-y-4">
+              <h3 className="text-lg font-semibold flex items-center gap-2">
+                <Stethoscope className="h-5 w-5 text-primary" />
+                Categories
+              </h3>
+
+              <div className="flex flex-wrap gap-2">
+                {vendor.categories.map((category, i) => (
+                  <Badge key={i} variant="outline" className="px-4 py-1.5">
+                    {category.title ?? "Unknown"}
+                  </Badge>
+                ))}
               </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 bg-muted/50 p-4 rounded-lg">
-                <div className="flex items-start gap-3">
-                  <Briefcase className="h-4 w-4 mt-1 text-muted-foreground" />
-                  <InfoRow
-                    label="Designation"
-                    value={vendor?.designation || "Not specified"}
-                  />
-                </div>
-                <div className="flex items-start gap-3">
-                  <GraduationCap className="h-4 w-4 mt-1 text-muted-foreground" />
-                  <InfoRow
-                    label="Qualification"
-                    value={vendor?.qualification || "Not specified"}
-                  />
-                </div>
-                <div className="flex items-start gap-3">
-                  <User className="h-4 w-4 mt-1 text-muted-foreground" />
-                  <InfoRow
-                    label="Registration Number"
-                    value={vendor?.registrationNumber || "Not specified"}
-                  />
-                </div>
-                <div className="flex items-start gap-3">
-                  <Calendar className="h-4 w-4 mt-1 text-muted-foreground" />
-                  <InfoRow
-                    label="Experience"
-                    value={
-                      vendor?.experience
-                        ? `${vendor.experience} years`
-                        : "Not specified"
-                    }
-                  />
-                </div>
-                <div className="flex items-start gap-3">
-                  <Briefcase className="h-4 w-4 mt-1 text-muted-foreground" />
-                  <InfoRow
-                    label="Current Working Place"
-                    value={vendor?.currentWorkingPlace || "Not specified"}
-                  />
-                </div>
-                <div className="flex items-start gap-3">
-                  <DollarSign className="h-4 w-4 mt-1 text-muted-foreground" />
-                  <InfoRow
-                    label="Appointment Fee"
-                    value={
-                      vendor?.appointmentFee
-                        ? `$${vendor.appointmentFee}`
-                        : "Not specified"
-                    }
-                  />
-                </div>
-              </div>
+            </section>
+          )}
+
+          <Separator />
+
+          {/* Contact Info */}
+          <section className="space-y-4">
+            <h3 className="text-lg font-semibold flex items-center gap-2">
+              <Phone className="h-5 w-5 text-primary" />
+              Contact Information
+            </h3>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 rounded-lg bg-muted/40 p-4">
+              <InfoRow
+                icon={<Phone className="h-4 w-4" />}
+                label="Contact Number"
+                value={vendor.contactNumber || "Not provided"}
+              />
+              <InfoRow
+                icon={<Mail className="h-4 w-4" />}
+                label="Email"
+                value={vendor.email}
+              />
+              <InfoRow
+                icon={<MapPin className="h-4 w-4" />}
+                label="Address"
+                value={vendor.address || "Not provided"}
+                className="md:col-span-2"
+              />
             </div>
+          </section>
 
-            <Separator />
+          <Separator />
 
-            {/* category */}
-            {vendor?.categories &&
-              vendor.categories.length > 0 && (
-                <>
-                  <div>
-                    <div className="flex items-center gap-2 mb-4">
-                      <Stethoscope className="h-5 w-5 text-green-600" />
-                      <h3 className="font-semibold text-lg">category</h3>
-                    </div>
-                    <div className="flex flex-wrap gap-2">
-                      {vendor.categories.map((category, index) => (
-                        <Badge
-                          key={index}
-                          variant="outline"
-                          className="px-4 py-2 text-sm"
-                        >
-                          {category.title || "Unknown"}
-                        </Badge>
-                      ))}
-                    </div>
-                  </div>
-                  <Separator />
-                </>
+          {/* Personal Info */}
+          <section className="space-y-4">
+            <h3 className="text-lg font-semibold flex items-center gap-2">
+              <User className="h-5 w-5 text-primary" />
+              Personal Information
+            </h3>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 rounded-lg bg-muted/40 p-4">
+              <InfoRow
+                icon={<User className="h-4 w-4" />}
+                label="Gender"
+                value={
+                  vendor.gender
+                    ? vendor.gender.charAt(0) +
+                      vendor.gender.slice(1).toLowerCase()
+                    : "Not specified"
+                }
+              />
+              <InfoRow
+                icon={<Calendar className="h-4 w-4" />}
+                label="Joined On"
+                value={formatDateTime(vendor.createdAt)}
+              />
+              <InfoRow
+                icon={<Calendar className="h-4 w-4" />}
+                label="Last Updated"
+                value={formatDateTime(vendor.updatedAt)}
+              />
+              {vendor.rating !== undefined && (
+                <InfoRow
+                  icon={<Star className="h-4 w-4" />}
+                  label="Average Rating"
+                  value={`${vendor.rating.toFixed(1)} / 5`}
+                />
               )}
-
-            {/* Contact Information */}
-            <div>
-              <div className="flex items-center gap-2 mb-4">
-                <Phone className="h-5 w-5 text-purple-600" />
-                <h3 className="font-semibold text-lg">Contact Information</h3>
-              </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 bg-muted/50 p-4 rounded-lg">
-                <div className="flex items-start gap-3">
-                  <Phone className="h-4 w-4 mt-1 text-muted-foreground" />
-                  <InfoRow
-                    label="Contact Number"
-                    value={vendor?.contactNumber || "Not provided"}
-                  />
-                </div>
-                <div className="flex items-start gap-3">
-                  <Mail className="h-4 w-4 mt-1 text-muted-foreground" />
-                  <InfoRow
-                    label="Email"
-                    value={vendor?.email || "Not provided"}
-                  />
-                </div>
-                <div className="flex items-start gap-3 md:col-span-2">
-                  <MapPin className="h-4 w-4 mt-1 text-muted-foreground" />
-                  <InfoRow
-                    label="Address"
-                    value={vendor?.address || "Not provided"}
-                  />
-                </div>
-              </div>
             </div>
-
-            <Separator />
-
-            {/* Personal Information */}
-            <div>
-              <div className="flex items-center gap-2 mb-4">
-                <User className="h-5 w-5 text-orange-600" />
-                <h3 className="font-semibold text-lg">Personal Information</h3>
-              </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 bg-muted/50 p-4 rounded-lg">
-                <div className="flex items-start gap-3">
-                  <User className="h-4 w-4 mt-1 text-muted-foreground" />
-                  <InfoRow
-                    label="Gender"
-                    value={
-                      vendor?.gender
-                        ? vendor.gender.charAt(0) +
-                          vendor.gender.slice(1).toLowerCase()
-                        : "Not specified"
-                    }
-                  />
-                </div>
-                <div className="flex items-start gap-3">
-                  <Calendar className="h-4 w-4 mt-1 text-muted-foreground" />
-                  <InfoRow
-                    label="Joined On"
-                    value={formatDateTime(vendor?.createdAt || "")}
-                  />
-                </div>
-                <div className="flex items-start gap-3">
-                  <Calendar className="h-4 w-4 mt-1 text-muted-foreground" />
-                  <InfoRow
-                    label="Last Updated"
-                    value={formatDateTime(vendor?.updatedAt || "")}
-                  />
-                </div>
-                {vendor?.rating !== undefined && (
-                  <div className="flex items-start gap-3">
-                    <Star className="h-4 w-4 mt-1 text-muted-foreground" />
-                    <InfoRow
-                      label="Average Rating"
-                      value={`${vendor.rating.toFixed(1)} / 5.0`}
-                    />
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
+          </section>
         </div>
       </DialogContent>
     </Dialog>

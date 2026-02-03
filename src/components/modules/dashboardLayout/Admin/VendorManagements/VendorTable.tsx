@@ -10,6 +10,7 @@ import { useRouter } from "next/navigation";
 import { vendorColums } from "./VendorColums";
 import { useState, useTransition } from "react";
 import { IVendor } from "@/types/vendor.interfac";
+import VendorViewDetailDialog from "./VendorViewDetailDialog";
 import ManagementTable from "@/components/shared/Managements/MangementTable";
 import DeleteConfirmationDialog from "@/components/shared/DeleteConfirmationDialog";
 
@@ -20,7 +21,7 @@ interface VendorTableProps {
 export default function VendorTable({ Vendor }: VendorTableProps) {
   const router = useRouter();
   const [, startTransition] = useTransition();
-
+  const [viewingVendor, setViewingVendor] = useState<IVendor | null>(null);
   const [deletingVendor, setDeletingVendor] = useState<IVendor | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
 
@@ -28,6 +29,10 @@ export default function VendorTable({ Vendor }: VendorTableProps) {
     startTransition(() => {
       router.refresh();
     });
+  };
+
+  const hendelView = (vendor: IVendor) => {
+    setViewingVendor(vendor);
   };
 
   const handleDelete = (Vendor: IVendor) => {
@@ -56,10 +61,17 @@ export default function VendorTable({ Vendor }: VendorTableProps) {
         data={Vendor}
         columns={vendorColums}
         onEdit={() => {}}
-        onView={() => {}}
+        onView={hendelView}
         getRowKey={(Vendor) => Vendor.id}
         onDelete={handleDelete}
         emptyMessage="No Vendor found"
+      />
+
+      {/* views Vendor Detiles */}
+      <VendorViewDetailDialog
+        open={!!viewingVendor}
+        onClose={() => setViewingVendor(null)}
+        vendor={viewingVendor}
       />
 
       <DeleteConfirmationDialog

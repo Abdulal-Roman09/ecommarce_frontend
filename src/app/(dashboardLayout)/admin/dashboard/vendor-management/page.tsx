@@ -21,7 +21,6 @@ export default async function VendorManagementsPage({
   const queryString = queryStringFormatter(searchParamsObj);
   const categoryResult = await getCategory();
   const vendorResult = await getVendors(queryString);
-  console.log(vendorResult);
   const totalPages = Math.ceil(
     vendorResult?.meta?.total / vendorResult?.meta?.limit,
   );

@@ -6,7 +6,7 @@ export const createVendor = z.object({
         .min(6, "Password must contain at least 6 characters"),
         name: z.string().trim().min(1, "Full name is required"),
         email: z.string().trim().email("Please enter a valid email address"),
-        contactNumber: z.string().min(1, "Contact number is required"),
+        contactNumber: z.string().min(10, "Contact number 10 required"),
         address: z.string().min(1, "Address is required"),
         gender: z.enum(["MALE", "FEMALE"], {
             message: "Please select either MALE or FEMALE"

@@ -1,3 +1,5 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -83,7 +85,7 @@ export default function TablePagination({
 
       {/* Page Info */}
       <span className="ml-2 text-sm text-muted-foreground">
-        {currentPage} of {totalPage}
+        page {currentPage} of {totalPage}
       </span>
     </div>
   );

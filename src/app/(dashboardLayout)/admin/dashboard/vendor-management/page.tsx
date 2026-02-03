@@ -12,6 +12,7 @@ import VendorManagementsHeaders from "@/components/modules/dashboardLayout/Admin
 export default async function VendorManagementsPage() {
   const categoryResult = await getCategory();
   const vendorResult = await getVendors();
+  console.log(vendorResult)
 
   return (
     <div className="space-y-6 ">

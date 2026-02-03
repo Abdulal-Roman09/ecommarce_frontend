@@ -3,25 +3,26 @@
 
 import { IVendor } from "@/types/vendor.interfac"
 import { zodValidatior } from "@/lib/zodValidation"
-import { serverFetchPost, serverFetchGet } from "@/lib/server-fetch"
+import { serverFetchPost, serverFetchGet, serverFetchDelete } from "@/lib/server-fetch"
 import { vendorValidationSchema } from "@/validations/vendorValidation"
 
 
 export const createVendor = async (_prevState: any, formData: FormData) => {
     try {
-
-        const payload = {
+        const payload: Partial<IVendor> = {
             name: formData.get("name") as string,
             email: formData.get("email") as string,
             contactNumber: formData.get("contactNumber") as string,
             address: formData.get("address") as string,
             gender: formData.get("gender") as "MALE" | "FEMALE",
-            profilePhoto: formData.get("profilePhoto") as string,
             password: formData.get("password") as string,
         }
 
+        console.log("Form payload:", payload)
+
         const validation = zodValidatior(payload, vendorValidationSchema.createVendor)
         if (validation.success === false) {
+            console.log("Validation errors:", validation)
             return validation
         }
 
@@ -37,8 +38,7 @@ export const createVendor = async (_prevState: any, formData: FormData) => {
                 email: validatedPayload.email,
                 contactNumber: validatedPayload.contactNumber,
                 address: validatedPayload.address,
-                gender: validatedPayload.gender,
-                profilePhoto: validatedPayload.profilePhoto,
+                gender: validatedPayload.gender
             },
         }
 
@@ -53,13 +53,14 @@ export const createVendor = async (_prevState: any, formData: FormData) => {
             body: newFormData,
         })
         const result = await response.json()
-        console.log({ result })
+        // console.log(result)
+        // console.log({ result })
         return result
     } catch (error: any) {
-        console.log(error)
+        console.error("Vendor creation error:", error)
         return {
             success: false,
-            message: process.env.NODE_ENV === "development" ? error.message : "Something went wrong",
+            message: error?.message || "Something went wrong",
         }
     }
 }
@@ -69,7 +70,6 @@ export const getVendors = async (queryStirng?: string) => {
         const endpoint = queryStirng ? `/vendor${queryStirng}` : `/vendor`;
         const response = await serverFetchGet(endpoint);
         const result = await response.json()
-        console.log({ result })
         return result
     } catch (error: any) {
         return {
@@ -110,10 +110,14 @@ export const updateVendor = async (id: string, _prevState: any, formData: FormDa
             profilePhoto: formData.get("profilePhoto") as string,
             password: formData.get("password") as string,
         }
-        if (zodValidatior(payload, vendorValidationSchema.updateVendor).success === false) {
-            return zodValidatior(payload, vendorValidationSchema.updateVendor)
+
+        const validation = zodValidatior(payload, vendorValidationSchema.updateVendor)
+        if (validation.success === false) {
+            console.log("Validation errors:", validation)
+            return validation
         }
-        const validatedPayload = zodValidatior(payload, vendorValidationSchema.updateVendor).data
+
+        const validatedPayload = validation.data
 
         if (!validatedPayload) {
             throw new Error("Invalid Payload")
@@ -131,14 +135,13 @@ export const updateVendor = async (id: string, _prevState: any, formData: FormDa
         })
         const result = await response.json()
         console.log({ result })
+        return result
 
     } catch (error: any) {
+        console.error("Vendor update error:", error)
         return {
             success: false,
-            message:
-                process.env.NODE_ENV === "development"
-                    ? error.message
-                    : "Something went wrong",
+            message: error?.message || "Something went wrong",
         };
     }
 }
@@ -162,7 +165,7 @@ export const deleteVendors = async (id: string) => {
 
 export const softDelteVendors = async (id: string) => {
     try {
-        const response = await serverFetchPost(`/vendor/soft/${id}`)
+        const response = await serverFetchDelete(`/vendor/soft-delete/${id}`)
         const result = await response.json()
         console.log({ result })
         return result

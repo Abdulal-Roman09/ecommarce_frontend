@@ -4,8 +4,6 @@ export const createVendor = z.object({
     password: z
         .string()
         .min(6, "Password must contain at least 6 characters"),
-
-    vendor: z.object({
         name: z.string().trim().min(1, "Full name is required"),
         email: z.string().trim().email("Please enter a valid email address"),
         contactNumber: z.string().min(1, "Contact number is required"),
@@ -14,7 +12,6 @@ export const createVendor = z.object({
             message: "Please select either MALE or FEMALE"
         }),
         profilePhoto: z.string().url("Invalid image URL").optional(),
-    }),
 });
 
 export const updateVendor = z.object({

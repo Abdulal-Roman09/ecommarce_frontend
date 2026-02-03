@@ -3,6 +3,7 @@ import DateCell from "@/components/shared/cell/DateCell";
 import UserInfoCell from "@/components/shared/cell/UserInfoCell";
 import StatusBadgeCell from "@/components/shared/cell/StatusBadgeCell";
 import { Column } from "@/components/shared/Managements/MangementTable";
+import { Star } from "lucide-react";
 
 export const vendorColums: Column<IVendor>[] = [
   {
@@ -64,8 +65,23 @@ export const vendorColums: Column<IVendor>[] = [
     ),
   },
   {
+    headers: "Rating",
+    accessor: (vendor) => (
+      <div className="flex items-center gap-1">
+        <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
+        <span className="text-sm font-medium">
+          {vendor?.rating!.toFixed(1)}
+        </span>
+      </div>
+    ),
+  },
+  {
     headers: "Status",
-    accessor: (vendor) => <StatusBadgeCell isDeleted={vendor.isDelete} />,
+    accessor: (vendor) => <StatusBadgeCell isDeleted={vendor?.isDelete} />,
+  },
+  {
+    headers: "Verified",
+    accessor: (vendor) => <StatusBadgeCell isDeleted={vendor?.isVerified} />,
   },
   {
     headers: "Joined",

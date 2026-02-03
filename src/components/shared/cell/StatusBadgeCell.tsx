@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { Badge } from "@/components/ui/badge";
 
@@ -9,9 +9,9 @@ interface StatusBadgeCellProps {
 }
 
 export default function StatusBadgeCell({
-  isDeleted,
-  activeText,
-  deletedText,
+  isDeleted = false,
+  activeText = "Active",
+  deletedText = "Deleted",
 }: StatusBadgeCellProps) {
   return (
     <Badge variant={isDeleted ? "destructive" : "default"}>

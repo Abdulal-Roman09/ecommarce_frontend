@@ -1,19 +1,21 @@
+
+
 export interface IVendor {
     id: string;
     name: string;
     email: string;
-    password:string;
-    contactNumber: string;
-    address: string;
-    gender: "MALE" | "FEMALE";
+    password: string;
     profilePhoto?: string | null;
+    contactNumber: string;
+    gender: "MALE" | "FEMALE";
+    address: string;
+    rating: number;
+    isVerified: boolean;
     isDelete: boolean;
-
-    shops?: IShop[];
+    shops: IShop[];
     categories: ICategories[];
-
-    createdAt: Date;
-    updatedAt: Date;
+    createdAt: string;
+    updatedAt: string;
 }
 
 

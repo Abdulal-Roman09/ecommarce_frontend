@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import {
@@ -22,8 +23,8 @@ import { Button } from "@/components/ui/button";
 import { IVendor } from "@/types/vendor.interfac";
 import { Loader2, UploadCloud } from "lucide-react";
 import { ICategory } from "@/types/category.interface";
-import { useEffect, useState, useActionState } from "react";
 import InputFieldError from "@/components/shared/InputFieldError";
+import { useEffect, useState, useActionState, useRef } from "react";
 import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { createVendor, updateVendor } from "@/services/admin/vendorManagement";
 
@@ -43,7 +44,7 @@ export default function VendorFromDialog({
   category = [],
 }: VendorFromDialogProps) {
   const isEdit = !!vendor;
-
+  const hasShownToast = useRef(false);
   const [state, formAction, pending] = useActionState(
     isEdit ? updateVendor.bind(null, vendor.id!) : createVendor,
     null,
@@ -53,12 +54,16 @@ export default function VendorFromDialog({
   const [gender, setGender] = useState<string>(vendor?.gender || "MALE");
 
   useEffect(() => {
-    if (state?.success) {
+    if (!state || hasShownToast.current) return;
+
+    if (state.success) {
       toast.success(state.message);
+      hasShownToast.current = true;
       onSuccess();
       onClose();
-    } else if (state && !state.success) {
+    } else {
       toast.error(state.message);
+      hasShownToast.current = true;
     }
   }, [state, onSuccess, onClose]);
 
@@ -132,7 +137,7 @@ export default function VendorFromDialog({
                 </SelectTrigger>
                 <SelectContent>
                   {category.length > 0 ? (
-                    category.map((cat) => (
+                    category.map((cat: any) => (
                       <SelectItem key={cat?.id} value={cat?.id}>
                         {cat?.title}
                       </SelectItem>

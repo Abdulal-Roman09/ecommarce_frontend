@@ -3,19 +3,26 @@
 
 import { IVendor } from "@/types/vendor.interfac"
 import { zodValidatior } from "@/lib/zodValidation"
-import { serverFetchPost, serverFetchGet, serverFetchDelete, serverFetchPatch } from "@/lib/server-fetch"
 import { vendorValidationSchema } from "@/validations/vendorValidation"
+import { serverFetchPost, serverFetchGet, serverFetchDelete, serverFetchPatch } from "@/lib/server-fetch"
 
 
 export const createVendor = async (_prevState: any, formData: FormData) => {
     try {
-        const payload: Partial<IVendor> = {
+        const categoryIdsString = formData.get("categoryIds") as string
+        const categoryIds = categoryIdsString ? JSON.parse(categoryIdsString) : undefined
+
+        const payload: any = {
             name: formData.get("name") as string,
             email: formData.get("email") as string,
             contactNumber: formData.get("contactNumber") as string,
             address: formData.get("address") as string,
             gender: formData.get("gender") as "MALE" | "FEMALE",
             password: formData.get("password") as string,
+        }
+
+        if (categoryIds) {
+            payload.categoryIds = categoryIds
         }
 
         console.log("Form payload:", payload)
@@ -31,15 +38,21 @@ export const createVendor = async (_prevState: any, formData: FormData) => {
             throw new Error("Invalid Payload")
         }
 
+        const vendor: any = {
+            name: validatedPayload.name,
+            email: validatedPayload.email,
+            contactNumber: validatedPayload.contactNumber,
+            address: validatedPayload.address,
+            gender: validatedPayload.gender,
+        }
+
+        if (validatedPayload.categoryIds) {
+            vendor.categoryIds = validatedPayload.categoryIds
+        }
+
         const newPayload = {
             password: validatedPayload.password,
-            vendor: {
-                name: validatedPayload.name,
-                email: validatedPayload.email,
-                contactNumber: validatedPayload.contactNumber,
-                address: validatedPayload.address,
-                gender: validatedPayload.gender
-            },
+            vendor,
         }
 
         const newFormData = new FormData()

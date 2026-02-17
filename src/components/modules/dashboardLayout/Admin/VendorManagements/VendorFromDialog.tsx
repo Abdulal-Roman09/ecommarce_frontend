@@ -50,7 +50,9 @@ export default function VendorFromDialog({
     null,
   );
 
-  const [selectedCategory, setSelectedCategory] = useState("");
+  const [selectedCategoryIds, setSelectedCategoryIds] = useState<string[]>(
+    vendor?.categories ? vendor.categories.map((cat) => cat.id) : [],
+  );
   const [gender, setGender] = useState<string>(vendor?.gender || "MALE");
 
   useEffect(() => {
@@ -127,10 +129,20 @@ export default function VendorFromDialog({
 
             <Field>
               <FieldLabel>Category</FieldLabel>
-              <input type="hidden" name="category" value={selectedCategory} />
+              <input
+                type="hidden"
+                name="categoryIds"
+                value={JSON.stringify(selectedCategoryIds)}
+              />
               <Select
-                value={selectedCategory}
-                onValueChange={setSelectedCategory}
+                value={
+                  selectedCategoryIds[selectedCategoryIds.length - 1] || ""
+                }
+                onValueChange={(value) => {
+                  if (value && !selectedCategoryIds.includes(value)) {
+                    setSelectedCategoryIds([...selectedCategoryIds, value]);
+                  }
+                }}
               >
                 <SelectTrigger>
                   <SelectValue placeholder="Select a category" />
@@ -149,7 +161,7 @@ export default function VendorFromDialog({
                   )}
                 </SelectContent>
               </Select>
-              <InputFieldError state={state} field="category" />
+              <InputFieldError state={state} field="categoryIds" />
             </Field>
 
             <Field>

@@ -1,44 +1,73 @@
-
 /* eslint-disable @typescript-eslint/no-explicit-any */
-"use server"
+"use server";
 
 import { getCookie } from "./jwtHendeler";
 import jwt, { JwtPayload } from "jsonwebtoken";
 import { UserInfo } from "@/types/userInfo.interface";
 import { redirect } from "next/navigation";
+import { serverFetchGet } from "@/lib/server-fetch";
 
-export const getUserInfo = async (): Promise<UserInfo | any> => {
-    try {
-        const accessToken = await getCookie("accessToken");
+export const getUserInfo = async (): Promise<UserInfo> => {
+    const accessToken = await getCookie("accessToken");
 
-        if (!accessToken) {
-            redirect("/");
-        }
-
-        const decoded = jwt.decode(accessToken) as JwtPayload | null;
-
-        let verifiedToken: JwtPayload;
-        try {
-            verifiedToken = jwt.verify(accessToken, process.env.JWT_SECRET as string) as JwtPayload;
-        } catch (verifyError: any) {
-            console.log("JWT verify error:", verifyError);
-            redirect("/");
-        }
-
-        if (verifiedToken.role && verifiedToken.role !== "ADMIN") {
-            redirect("/");
-        }
-
-        const userInfo: UserInfo | any = {
-            name: verifiedToken.name || decoded?.name || "Unknown User",
-            email: verifiedToken.email || decoded?.email || "",
-            role: verifiedToken.role || decoded?.role || "CUSTOMER",
-            ...(decoded || {}),
-        };
-
-        return userInfo;
-    } catch (error: any) {
-        console.log(error);
+    if (!accessToken) {
         redirect("/");
     }
-}
+
+    let verifiedToken: JwtPayload;
+
+    try {
+        verifiedToken = jwt.verify(
+            accessToken,
+            process.env.JWT_SECRET as string
+        ) as JwtPayload;
+    } catch (error) {
+        console.log("JWT verify error:", error);
+        redirect("/");
+    }
+
+    const userId = verifiedToken.id;
+
+    if (!userId) {
+        redirect("/");
+    }
+
+    try {
+        const response = await serverFetchGet(`/user/${userId}`, {
+            cache: "force-cache",
+            next: { tags: ["UserInfo"] }
+        });
+        const result = await response.json();
+
+        if (!result.success) {
+            throw new Error(result.message);
+        }
+        const name =
+            result?.admin?.name ||
+            result?.data?.customer?.name ||
+            result?.data?.vendor?.name ||
+            "Unknown User";
+        const profilePhoto =
+            result?.admin?.profilePhoto ||
+            result?.data?.customer?.profilePhoto ||
+            result?.data?.vendor?.profilePhoto ||
+            "Unknown User";
+
+        const userInfo: UserInfo = {
+            name,
+            profilePhoto,
+            ...result.data
+        };
+
+
+        return userInfo
+    } catch (error: any) {
+        console.error("Fetch user error:", error);
+
+        return {
+            name: verifiedToken.name || "Unknown User",
+            email: verifiedToken.email || "",
+            role: verifiedToken.role || "CUSTOMER",
+        } as Partial<UserInfo>;
+    }
+};

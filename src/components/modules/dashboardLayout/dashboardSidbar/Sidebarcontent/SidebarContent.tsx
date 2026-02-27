@@ -1,6 +1,5 @@
 "use client";
 
-import * as React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { UserCheck } from "lucide-react";
@@ -92,7 +91,6 @@ export function DashboardSidebarContent({
           >
             {/* Basic Info */}
             <div className="p-4 space-y-1">
-              <p className="text-sm font-semibold">{userInfo.name}</p>
               <p className="text-xs text-muted-foreground">{userInfo.email}</p>
             </div>
 

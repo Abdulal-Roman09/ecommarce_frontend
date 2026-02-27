@@ -1,9 +1,9 @@
-import { DashboardSidebarContent } from "./Sidebarcontent/SidebarContent";
-import { getUserInfo } from "@/services/auth/getUserInfo";
 import { UserInfo } from "@/types/userInfo.interface";
-import { getDefaultDashboardRoutes } from "@/lib/auth-utils";
 import { NavSection } from "@/types/dashboard.interfac";
 import { getNavItemsByRole } from "@/lib/nevItems.config";
+import { getUserInfo } from "@/services/auth/getUserInfo";
+import { getDefaultDashboardRoutes } from "@/lib/auth-utils";
+import { DashboardSidebarContent } from "./Sidebarcontent/SidebarContent";
 
 
 

@@ -4,6 +4,7 @@
 import { zodValidatior } from "@/lib/zodValidation";
 import { createCategoryValdationSchema } from "@/validations/categoryValidation";
 import { serverFetchDelete, serverFetchGet, serverFetchPost } from "../../lib/server-fetch";
+import { revalidateTag } from "next/cache";
 
 
 export async function createCategory(_prevState: any, formData: FormData) {
@@ -36,6 +37,9 @@ export async function createCategory(_prevState: any, formData: FormData) {
         }
 
         const result = await response.json();
+        if (result.success) {
+            revalidateTag("category", "max")
+        }
 
         return JSON.parse(JSON.stringify(result));
 
@@ -53,7 +57,10 @@ export async function createCategory(_prevState: any, formData: FormData) {
 
 export async function getCategory() {
     try {
-        const response = await serverFetchGet("/category")
+        const response = await serverFetchGet("/category", {
+            cache: "force-cache",
+            next: { tags: ["category"] }
+        })
         return await response.json()
     } catch (err: any) {
         console.error(err);

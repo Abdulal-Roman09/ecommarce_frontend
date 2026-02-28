@@ -5,10 +5,10 @@ interface RouteConfig {
     patterns: RegExp[];
 }
 
-export const authRoutes: string[] = ["/login", "/register", "/forgot-password", "/reset-password"];
+export const authRoutes: string[] = ["/login", "/register", "/forgot-password"];
 
 export const commonProtectedRoutes: RouteConfig = {
-    exact: ["/my-profile", "/settings"],
+    exact: ["/my-profile", "/settings", "/reset-password"],
     patterns: []
 };
 

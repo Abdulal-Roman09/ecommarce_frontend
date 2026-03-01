@@ -59,15 +59,14 @@ export const getUserInfo = async (): Promise<UserInfo> => {
             ...result.data
         };
 
-
         return userInfo
     } catch (error: any) {
         console.error("Fetch user error:", error);
-
-        return {
+        const data: any = {
             name: verifiedToken.name || "Unknown User",
             email: verifiedToken.email || "",
-            role: verifiedToken.role || "CUSTOMER",
-        } as Partial<UserInfo>;
+            role: verifiedToken.role || "CUSTOMER"
+        }
+        return data
     }
 };

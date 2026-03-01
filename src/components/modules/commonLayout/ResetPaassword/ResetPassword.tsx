@@ -30,16 +30,16 @@ const ResetPasswordForm = ({ redirect }: { redirect?: string }) => {
         <div className="grid grid-cols-1 gap-4">
           {/* New Password */}
           <Field>
-            <FieldLabel htmlFor="newPassword">New Password</FieldLabel>
+            <FieldLabel htmlFor="password">New Password</FieldLabel>
             <Input
-              id="newPassword"
-              name="newPassword"
+              id="password"
+              name="password"
               type="password"
               placeholder="Enter new password"
               className="border border-primary"
               autoComplete="new-password"
             />
-            <InputFieldError field="newPassword" state={state as any} />
+            <InputFieldError field="password" state={state as any} />
           </Field>
 
         </div>

@@ -104,6 +104,10 @@ export const loginCustomer = async (_currentState: any, formData: FormData): Pro
             throw new Error(message);
         }
 
+        if (result.data.needPasswordChange === true) {
+            redirect("/reset-password")
+        }
+
 
         if (redirectTo) {
             const requestedPath = redirectTo.toString();

@@ -90,7 +90,7 @@ export async function resetPassword(_prevState: any, formData: FormData) {
         const response = await serverFetchPost("/auth/reset-password", {
             body: JSON.stringify({
                 id: user?.id,
-                password: validationPayload.newPassword,
+                password: validationPayload.password,
             }),
             headers: {
                 "Authorization": accessToken,
@@ -99,6 +99,7 @@ export async function resetPassword(_prevState: any, formData: FormData) {
         });
 
         const result = await response.json();
+
 
         if (!result.success) {
             throw new Error(result.message || "Reset password failed");

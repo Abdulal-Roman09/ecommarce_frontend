@@ -87,7 +87,7 @@ export const getcustomers = async (queryStirng?: string) => {
     }
 }
 
-export const getSinglecustomers = async (id: string) => {
+export const getSingleCustomers = async (id: string) => {
     try {
         const response = await serverFetchGet(`customer/${id}`);
         const result = await response.json()
@@ -104,7 +104,7 @@ export const getSinglecustomers = async (id: string) => {
     }
 }
 
-export const updatecustomer = async (id: string, _prevState: any, formData: FormData) => {
+export const updateCustomer = async (id: string, _prevState: any, formData: FormData) => {
     try {
         const payload: Partial<ICustomer & { password?: string }> = {
             name: formData.get("name") as string,
@@ -141,7 +141,7 @@ export const updatecustomer = async (id: string, _prevState: any, formData: Form
     }
 }
 
-export const deletecustomers = async (id: string) => {
+export const deleteCustomers = async (id: string) => {
     try {
         const response = await serverFetchPost(`/customer/${id}`)
         const result = await response.json()
@@ -158,7 +158,7 @@ export const deletecustomers = async (id: string) => {
     }
 }
 
-export const softDeltecustomers = async (id: string) => {
+export const softDeleteCustomers = async (id: string) => {
     try {
         const response = await serverFetchDelete(`/customer/soft-delete/${id}`)
         const result = await response.json()

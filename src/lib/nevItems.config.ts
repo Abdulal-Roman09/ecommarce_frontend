@@ -104,7 +104,7 @@ export const adminNavItems = (role: UserRole): NavSection[] => {
                 },
                 {
                     title: "Customer Management",
-                    href: "/admin/dashboard/customer-management",
+                    href: "/admin/dashboard/customer-mangement",
                     icon: "User",
                     roles: ["ADMIN", "SUPER_ADMIN"],
                 },

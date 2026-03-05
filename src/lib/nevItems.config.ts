@@ -109,6 +109,12 @@ export const adminNavItems = (role: UserRole): NavSection[] => {
                     roles: ["ADMIN", "SUPER_ADMIN"],
                 },
                 {
+                    title: "Brand Management",
+                    href: "/admin/dashboard/brand-management",
+                    icon: "Tag",
+                    roles: ["ADMIN", "SUPER_ADMIN"],
+                },
+                {
                     title: "All Products",
                     href: "/admin/dashboard/products",
                     icon: "ClipboardCheck",

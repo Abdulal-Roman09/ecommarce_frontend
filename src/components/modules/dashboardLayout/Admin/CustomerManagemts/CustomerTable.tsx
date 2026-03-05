@@ -52,7 +52,7 @@ export default function CustomerTable({ customers }: CustomerTableProps) {
     setDeletingCustomer(customer);
   };
 
-  // Confirm delete logic with error handling
+
   const confirmDelete = async () => {
     if (!deletingCustomer) return;
 
@@ -78,9 +78,6 @@ export default function CustomerTable({ customers }: CustomerTableProps) {
 
   return (
     <>
-      {/* Main Table Display: 
-          Uses customerColumns for data mapping 
-      */}
       <ManagementTable
         data={customers}
         columns={customerColumns}
@@ -91,7 +88,6 @@ export default function CustomerTable({ customers }: CustomerTableProps) {
         emptyMessage="No customers found in the system."
       />
 
-      {/* Dialog: Create or Update Customer */}
       <CustomerFormDialog
         open={!!editingCustomer}
         onClose={() => setEditingCustomer(null)}
@@ -102,14 +98,12 @@ export default function CustomerTable({ customers }: CustomerTableProps) {
         }}
       />
 
-      {/* Dialog: Full Customer Details View */}
       <CustomerViewDetailDialog
         open={!!viewingCustomer}
         onClose={() => setViewingCustomer(null)}
         customer={viewingCustomer}
       />
 
-      {/* Dialog: Destructive Delete Confirmation */}
       <DeleteConfirmationDialog
         open={!!deletingCustomer}
         onOpenChange={(open) => !open && setDeletingCustomer(null)}
